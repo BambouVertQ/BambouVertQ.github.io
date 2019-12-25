@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>Mycat 不适应场景（改造尽量避免） | Hexo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  
+    <meta name="keywords" content="MinHow,MinHow's Blog" />
+  
+  <meta name="description" content="1.非分片字段查询Mycat中的路由结果是通过分片字段和分片方法来确定的。例如下图中的一个Mycat分库方案： · 根据 tt_waybill 表的 id 字段来进行分片 · 分片方法为 id 值取 3 的模，根据模值确定在DB1，DB2，DB3中的某个分片  如果查询条件中有 id 字段的情况还好，查询将会落到某个具体的分片。例如： mysql&gt;select * fromtt_waybil">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Mycat 不适应场景（改造尽量避免）">
+<meta property="og:url" content="http://yoursite.com/2019/05/05/Mycat%20%E4%B8%8D%E9%80%82%E5%BA%94%E5%9C%BA%E6%99%AF%EF%BC%88%E6%94%B9%E9%80%A0%E5%B0%BD%E9%87%8F%E9%81%BF%E5%85%8D%EF%BC%89/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="1.非分片字段查询Mycat中的路由结果是通过分片字段和分片方法来确定的。例如下图中的一个Mycat分库方案： · 根据 tt_waybill 表的 id 字段来进行分片 · 分片方法为 id 值取 3 的模，根据模值确定在DB1，DB2，DB3中的某个分片  如果查询条件中有 id 字段的情况还好，查询将会落到某个具体的分片。例如： mysql&gt;select * fromtt_waybil">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://img-blog.csdn.net/20180316145328555?watermark/2/text/Ly9ibG9nLmNzZG4ubmV0L2dhb2J1ZG9uZzEyMzQ=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70">
+<meta property="og:image" content="http://img-blog.csdn.net/20180316145403529?watermark/2/text/Ly9ibG9nLmNzZG4ubmV0L2dhb2J1ZG9uZzEyMzQ=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70">
+<meta property="og:image" content="http://img-blog.csdn.net/20180316145425324?watermark/2/text/Ly9ibG9nLmNzZG4ubmV0L2dhb2J1ZG9uZzEyMzQ=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70">
+<meta property="og:image" content="http://img-blog.csdn.net/20180316145432449?watermark/2/text/Ly9ibG9nLmNzZG4ubmV0L2dhb2J1ZG9uZzEyMzQ=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70">
+<meta property="og:image" content="http://img-blog.csdn.net/20180316145454648?watermark/2/text/Ly9ibG9nLmNzZG4ubmV0L2dhb2J1ZG9uZzEyMzQ=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70">
+<meta property="og:image" content="http://img-blog.csdn.net/2018031614550642?watermark/2/text/Ly9ibG9nLmNzZG4ubmV0L2dhb2J1ZG9uZzEyMzQ=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70">
+<meta property="og:image" content="http://img-blog.csdn.net/20180316145512943?watermark/2/text/Ly9ibG9nLmNzZG4ubmV0L2dhb2J1ZG9uZzEyMzQ=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70">
+<meta property="og:image" content="http://img-blog.csdn.net/20180316145519463?watermark/2/text/Ly9ibG9nLmNzZG4ubmV0L2dhb2J1ZG9uZzEyMzQ=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70">
+<meta property="og:image" content="http://img-blog.csdn.net/20180316145524527?watermark/2/text/Ly9ibG9nLmNzZG4ubmV0L2dhb2J1ZG9uZzEyMzQ=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70">
+<meta property="article:published_time" content="2019-05-05T05:58:19.000Z">
+<meta property="article:modified_time" content="2019-05-05T05:58:23.820Z">
+<meta property="article:author" content="John Doe">
+<meta property="article:tag" content="CSDN迁移">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://img-blog.csdn.net/20180316145328555?watermark/2/text/Ly9ibG9nLmNzZG4ubmV0L2dhb2J1ZG9uZzEyMzQ=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70">
+  
+  
+    <link rel="icon" href="/favicon.ico">
+  
+  <link href="//cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+<script src="/js/pace.min.js"></script>
+
+  
+
+  
+  
+
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+<body>
+  <div id="container">
+      <header id="header">
+    <div id="banner"></div>
+    <div id="header-outer">
+        <div id="header-menu" class="header-menu-pos animated">
+            <div class="header-menu-container">
+                <a href="/" class="left">
+                    <span class="site-title">MinHow&#39;s Blog</span>
+                </a>
+                <nav id="header-menu-nav" class="right">
+                    
+                    <a  href="/">
+                        <i class="fa fa-home"></i>
+                        <span>Home</span>
+                    </a>
+                    
+                    <a  href="/archives">
+                        <i class="fa fa-archive"></i>
+                        <span>Archives</span>
+                    </a>
+                    
+                    <a  href="/about">
+                        <i class="fa fa-user"></i>
+                        <span>About</span>
+                    </a>
+                    
+                </nav>
+                <a class="mobile-header-menu-button">
+                    <i class="fa fa-bars"></i>
+                </a>
+            </div>
+        </div>
+        <div id="header-row">
+            <div id="logo">
+                <a href="/">
+                    <img src="/images/logo.png" alt="logo">
+                </a>
+            </div>
+            <div class="header-info">
+                <div id="header-title">
+                    
+                    <h2>
+                        MinHow&#39;s Blog
+                    </h2>
+                    
+                </div>
+                <div id="header-description">
+                    
+                    <h3>
+                        一个专注 WEB 开发的技术博客
+                    </h3>
+                    
+                </div>
+            </div>
+            <nav class="header-nav">
+                <div class="social">
+                    
+                        <a title="MinHow" target="_blank" href="//minhow.com">
+                            <i class="fa fa-home fa-2x"></i></a>
+                    
+                        <a title="Github" target="_blank" href="//github.com/wongminho">
+                            <i class="fa fa-github fa-2x"></i></a>
+                    
+                        <a title="Weibo" target="_blank" href="//weibo.com/WongMinHo">
+                            <i class="fa fa-weibo fa-2x"></i></a>
+                    
+                        <a title="Twitter" target="_blank" href="//twitter.com/huangminhow">
+                            <i class="fa fa-twitter fa-2x"></i></a>
+                    
+                </div>
+            </nav>
+        </div>
+    </div>
+</header>
+      <div class="outer">
+        <section id="main" class="body-wrap"><article id="post-Mycat 不适应场景（改造尽量避免）" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 class="post-title" itemprop="name">
+      Mycat 不适应场景（改造尽量避免）
+    </h1>
+    <div class="post-title-bar">
+      <ul>
+          
+        <li>
+          <i class="fa fa-calendar"></i>  2019-05-05
+        </li>
+        <li>
+          <i class="fa fa-eye"></i>
+          <span id="busuanzi_value_page_pv"></span>
+        </li>
+      </ul>
+    </div>
+  
+
+          
+      </header>
+    
+    <div class="article-entry post-content" itemprop="articleBody">
+      
+            
+            <h2 id=""><a href="#" class="headerlink" title=""></a></h2><h2 id="1-非分片字段查询"><a href="#1-非分片字段查询" class="headerlink" title="1.非分片字段查询"></a>1.非分片字段查询</h2><p>Mycat中的路由结果是通过<strong>分片字段</strong>和<strong>分片方法</strong>来确定的。例如下图中的一个Mycat分库方案：</p>
+<p>· 根据 <strong>tt_waybill</strong> 表的 <strong>id</strong> 字段来进行分片</p>
+<p>· 分片方法为 <strong>id</strong> 值取 <strong>3</strong> 的模，根据模值确定在DB1，DB2，DB3中的某个分片</p>
+<p><img src="//img-blog.csdn.net/20180316145328555?watermark/2/text/Ly9ibG9nLmNzZG4ubmV0L2dhb2J1ZG9uZzEyMzQ=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" alt=""></p>
+<p>如果查询条件中有 <strong>id</strong> 字段的情况还好，查询将会落到某个具体的分片。例如：</p>
+<p>mysql&gt;select * fromtt_waybill where <strong>id</strong> =12330;</p>
+<p>此时Mycat会计算路由结果</p>
+<p>12330 % 3 = 0 –&gt; DB1</p>
+<p>并将该请求路由到DB1上去执行。   </p>
+<p><img src="//img-blog.csdn.net/20180316145403529?watermark/2/text/Ly9ibG9nLmNzZG4ubmV0L2dhb2J1ZG9uZzEyMzQ=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" alt=""><br>如果查询条件中没有 <strong>分片字段</strong> 条件，例如：</p>
+<p>mysql&gt;select * fromtt_waybill where waybill_no =88661;</p>
+<p>此时Mycat无法计算路由，便发送到所有节点上执行：</p>
+<p>DB1 –&gt; select * fromtt_waybill where waybill_no =88661;<br>DB2 –&gt; select * from tt_waybill where waybill_no =88661;<br>DB3 –&gt; select * from tt_waybill where waybill_no =88661;</p>
+<p>如果该分片字段选择度高，也是业务常用的查询维度，一般只有一个或极少数个DB节点命中（返回结果集）。示例中只有3个DB节点，而实际应用中的DB节点数远超过这个，假如有50个，那么前端的一个查询，落到MySQL数据库上则变成50个查询，会极大消耗Mycat和MySQL数据库资源。</p>
+<p>如果设计使用Mycat时有非分片字段查询，请考虑放弃！</p>
+<h2 id="2-分页排序"><a href="#2-分页排序" class="headerlink" title="2.分页排序"></a><a href=""></a>2.分页排序</h2><p>先看一下Mycat是如何处理分页操作的，假如有如下Mycat分库方案：<br>一张表有30份数据分布在3个分片DB上，具体数据分布如下</p>
+<p>DB1：[0,1,2,3,4,10,11,12,13,14]<br>DB2：[5,6,7,8,9,16,17,18,19]<br>DB3：[20,21,22,23,24,25,26,27,28,29]</p>
+<p>（这个示例的场景中没有查询条件，所以都是全分片查询，也就没有假定该表的分片字段和分片方法）</p>
+<p>当应用执行如下分页查询时</p>
+<p>mysql&gt;select * fromtable limit 2;</p>
+<p>Mycat将该SQL请求分发到各个DB节点去执行，并接收各个DB节点的返回结果</p>
+<p>DB1: [0,1]<br>DB2: [5,6]<br>DB3: [20,21]</p>
+<p>但Mycat向应用返回的结果集取决于哪个DB节点最先返回结果给Mycat。如果Mycat最先收到DB1节点的结果集，那么Mycat返回给应用端的结果集为 <strong>[0,1]</strong>，如果Mycat最先收到DB2节点的结果集，那么返回给应用端的结果集为 <strong>[5,6]</strong>。也就是说，相同情况下，同一个SQL，在Mycat上执行时会有不同的返回结果。</p>
+<p>在Mycat中执行分页操作时必须显示加上排序条件才能保证结果的正确性，下面看一下Mycat对排序分页的处理逻辑。<br>假如在前面的分页查询中加上了排序条件（假如表数据的列名为<strong>id</strong>）</p>
+<p>mysql&gt;select * fromtable <strong>orderby id</strong> limit 2;</p>
+<p>Mycat的处理逻辑如下图：</p>
+<p><img src="//img-blog.csdn.net/20180316145425324?watermark/2/text/Ly9ibG9nLmNzZG4ubmV0L2dhb2J1ZG9uZzEyMzQ=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" alt=""></p>
+<p>在有排序呢条件的情况下，Mycat接收到各个DB节点的返回结果后，对其进行最小堆运算，计算出所有结果集中最小的两条记录 <strong>[0,1]</strong> 返回给应用。</p>
+<p>但是，当排序分页中有 <strong>偏移量</strong> （offset）时，处理逻辑又有不同。假如应用的查询SQL如下：</p>
+<p>mysql&gt;select * fromtable order by id <strong>limit 5,2</strong>;</p>
+<p>如果按照上述排序分页逻辑来处理，那么处理结果如下图：</p>
+<p><img src="//img-blog.csdn.net/20180316145432449?watermark/2/text/Ly9ibG9nLmNzZG4ubmV0L2dhb2J1ZG9uZzEyMzQ=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" alt=""></p>
+<p>Mycat将各个DB节点返回的数据 <strong>[10,11],[16,17], [20,21]</strong> 经过最小堆计算后返回给应用的结果集是 <strong>[10,11]</strong>。可是，对于应用而言，该表的所有数据明明是 <strong>0-29</strong> 这30个数据的集合，<strong>limit 5,2</strong> 操作返回的结果集应该是 <strong>[5,6]</strong>，如果返回 <strong>[10,11]</strong> 则是错误的处理逻辑。</p>
+<p>所以Mycat在处理 <strong>有偏移量的排序分页</strong> 时是另外一套逻辑——<strong>改写SQL</strong> 。如下图：</p>
+<p>Mycat在下发有 <strong>limit m,n</strong> 的SQL语句时会对其进行改写，改写成 <strong>limit 0, m+n</strong> 来保证查询结果的逻辑正确性。所以，Mycat发送到后端DB上的SQL语句是</p>
+<p>mysql&gt;select * fromtable order by id limit 0,7;</p>
+<p>各个DB返回给Mycat的结果集是</p>
+<p>DB1: [0,1,2,3,4,10,11]<br>DB2: [5,6,7,8,9,16,17]<br>DB3: [20,21,22,23,24,25,26]</p>
+<p>经过最小堆计算后得到最小序列 <strong>[0,1,2,3,4,5,6]</strong> ，然后返回偏移量为5的两个结果为 <strong>[5,6]</strong> 。</p>
+<p>虽然Mycat返回了正确的结果，但是仔细推敲发现这类操作的处理逻辑是及其消耗（浪费）资源的。应用需要的结果集为2条，Mycat中需要处理的结果数为21条。也就是说，对于有 <strong>t</strong> 个DB节点的全分片 <strong>limit m, n</strong> 操作，Mycat需要处理的数据量为 <strong>(m+n)*t</strong> 个。比如实际应用中有50个DB节点，要执行limit 1000,10操作，则Mycat处理的数据量为 <strong>50500</strong> 条，返回结果集为<strong>10</strong>，当偏移量更大时，内存和CPU资源的消耗则是数十倍增加。</p>
+<p>如果设计使用Mycat时有分页排序，请考虑放弃！</p>
+<h2 id="3-任意表JOIN"><a href="#3-任意表JOIN" class="headerlink" title="3.任意表JOIN"></a><a href=""></a>3.任意表JOIN</h2><p>先看一下在单库中JOIN中的场景。假设在某单库中有 <strong>player</strong> 和 <strong>team</strong> 两张表，<strong>player</strong> 表中的 <strong>team_id</strong> 字段与 <strong>team</strong> 表中的<strong>id</strong> 字段相关联。操作场景如下图：</p>
+<p><img src="//img-blog.csdn.net/20180316145454648?watermark/2/text/Ly9ibG9nLmNzZG4ubmV0L2dhb2J1ZG9uZzEyMzQ=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" alt=""></p>
+<p>JOIN操作的SQL如下</p>
+<p>mysql&gt;selectp_name,t_name from player p, team t where p.no = 3 and p.team_id = t.id;</p>
+<p>此时能查询出结果</p>
+<p>如果将这两个表的数据分库后，相关联的数据可能分布在不同的DB节点上，如下图：</p>
+<p><img src="//img-blog.csdn.net/2018031614550642?watermark/2/text/Ly9ibG9nLmNzZG4ubmV0L2dhb2J1ZG9uZzEyMzQ=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" alt=""></p>
+<p>这个SQL在各个单独的分片DB中都查不出结果，也就是说Mycat不能查询出正确的结果集。</p>
+<p>设计使用Mycat时如果要进行表JOIN操作，要确保两个表的关联字段具有相同的数据分布，否则请考虑放弃！</p>
+<h2 id="4-分布式事务"><a href="#4-分布式事务" class="headerlink" title="4.分布式事务"></a><a href=""></a>4.分布式事务</h2><p>Mycat并没有根据二阶段提交协议实现 <strong>XA事务</strong>，而是只保证 <strong>prepare</strong> 阶段数据一致性的 <strong>弱XA事务</strong> ，实现过程如下：</p>
+<p>应用开启事务后Mycat标识该连接为非自动提交，比如前端执行</p>
+<p>mysql&gt;begin;</p>
+<p>Mycat不会立即把命令发送到DB节点上，等后续下发SQL时，Mycat从连接池获取非自动提交的连接去执行。</p>
+<p><img src="//img-blog.csdn.net/20180316145512943?watermark/2/text/Ly9ibG9nLmNzZG4ubmV0L2dhb2J1ZG9uZzEyMzQ=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" alt=""></p>
+<p>Mycat会等待各个节点的返回结果，如果都执行成功，Mycat给该连接标识为 <strong>Prepare Ready</strong> 状态，如果有一个节点执行失败，则标识为 <strong>Rollback</strong> 状态。</p>
+<p><img src="//img-blog.csdn.net/20180316145519463?watermark/2/text/Ly9ibG9nLmNzZG4ubmV0L2dhb2J1ZG9uZzEyMzQ=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" alt=""></p>
+<p>执行完成后Mycat等待前端发送 <em>commit</em> 或 <em>rollback</em> 命令。发送 <em>commit</em> 命令时，Mycat检测当前连接是否为 <strong>Prepare Ready</strong> 状态，若是，则将 <em>commit</em> 命令发送到各个DB节点。</p>
+<p><img src="//img-blog.csdn.net/20180316145524527?watermark/2/text/Ly9ibG9nLmNzZG4ubmV0L2dhb2J1ZG9uZzEyMzQ=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" alt=""></p>
+<p>但是，这一阶段是无法保证一致性的，如果一个DB节点在 <em>commit</em> 时故障，而其他DB节点 <em>commit</em> 成功，Mycat会一直等待故障DB节点返回结果。Mycat只有收到所有DB节点的成功执行结果才会向前端返回 <em>执行成功</em> 的包，此时Mycat只能一直 <em>waiting</em> 直至_TIMEOUT_，导致事务一致性被破坏。</p>
+<p>设计使用Mycat时如果有分布式事务，得先看是否得保证事务得强一致性，否则请考虑放弃！</p>
+
+            <div class="post-copyright">
+    <div class="content">
+        <p>最后更新： 2019年05月05日 13:58</p>
+        <p>原始链接： <a class="post-url" href="/2019/05/05/Mycat%20%E4%B8%8D%E9%80%82%E5%BA%94%E5%9C%BA%E6%99%AF%EF%BC%88%E6%94%B9%E9%80%A0%E5%B0%BD%E9%87%8F%E9%81%BF%E5%85%8D%EF%BC%89/" title="Mycat 不适应场景（改造尽量避免）">http://yoursite.com/2019/05/05/Mycat%20%E4%B8%8D%E9%80%82%E5%BA%94%E5%9C%BA%E6%99%AF%EF%BC%88%E6%94%B9%E9%80%A0%E5%B0%BD%E9%87%8F%E9%81%BF%E5%85%8D%EF%BC%89/</a></p>
+        <footer>
+            <a href="http://yoursite.com">
+                <img src="/images/logo.png" alt="John Doe">
+                John Doe
+            </a>
+        </footer>
+    </div>
+</div>
+
+      
+        
+            
+<div class="page-reward">
+    <a id="rewardBtn" href="javascript:;">赏</a>
+</div>
+
+<div id="reward" class="post-modal reward-lay">
+    <a class="close" href="javascript:;" id="reward-close">×</a>
+    <span class="reward-title">
+        <i class="icon icon-quote-left"></i>
+        请我吃糖~
+        <i class="icon icon-quote-right"></i>
+    </span>
+    <div class="reward-content">
+        
+        <div class="reward-code">
+            <img id="rewardCode" src="/images/wechat_code.jpg" alt="打赏二维码">
+        </div>
+        <div class="reward-select">
+            
+            <label class="reward-select-item checked" data-id="wechat" data-wechat="/images/wechat_code.jpg">
+                <img class="reward-select-item-wechat" src="/images/wechat.png" alt="微信">
+            </label>
+            
+            
+            <label class="reward-select-item" data-id="alipay" data-alipay="/images/alipay_code.jpg">
+                <img class="reward-select-item-alipay" src="/images/alipay.png" alt="支付宝">
+            </label>
+            
+        </div>
+    </div>
+</div>
+
+
+        
+    </div>
+    <footer class="article-footer">
+        
+        
+<div class="post-share">
+    <a href="javascript:;" id="share-sub" class="post-share-fab">
+        <i class="fa fa-share-alt"></i>
+    </a>
+    <div class="post-share-list" id="share-list">
+        <ul class="share-icons">
+          <li>
+            <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://yoursite.com/2019/05/05/Mycat%20%E4%B8%8D%E9%80%82%E5%BA%94%E5%9C%BA%E6%99%AF%EF%BC%88%E6%94%B9%E9%80%A0%E5%B0%BD%E9%87%8F%E9%81%BF%E5%85%8D%EF%BC%89/&title=《Mycat 不适应场景（改造尽量避免）》 — Hexo&pic=http://yoursite.comimages/logo.png" data-title="微博">
+              <i class="fa fa-weibo"></i>
+            </a>
+          </li>
+          <li>
+            <a class="weixin share-sns" id="wxFab" href="javascript:;" data-title="微信">
+              <i class="fa fa-weixin"></i>
+            </a>
+          </li>
+          <li>
+            <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://yoursite.com/2019/05/05/Mycat%20%E4%B8%8D%E9%80%82%E5%BA%94%E5%9C%BA%E6%99%AF%EF%BC%88%E6%94%B9%E9%80%A0%E5%B0%BD%E9%87%8F%E9%81%BF%E5%85%8D%EF%BC%89/&title=《Mycat 不适应场景（改造尽量避免）》 — Hexo&source=" data-title="QQ">
+              <i class="fa fa-qq"></i>
+            </a>
+          </li>
+          <li>
+            <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://yoursite.com/2019/05/05/Mycat%20%E4%B8%8D%E9%80%82%E5%BA%94%E5%9C%BA%E6%99%AF%EF%BC%88%E6%94%B9%E9%80%A0%E5%B0%BD%E9%87%8F%E9%81%BF%E5%85%8D%EF%BC%89/" data-title="Facebook">
+              <i class="fa fa-facebook"></i>
+            </a>
+          </li>
+          <li>
+            <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《Mycat 不适应场景（改造尽量避免）》 — Hexo&url=http://yoursite.com/2019/05/05/Mycat%20%E4%B8%8D%E9%80%82%E5%BA%94%E5%9C%BA%E6%99%AF%EF%BC%88%E6%94%B9%E9%80%A0%E5%B0%BD%E9%87%8F%E9%81%BF%E5%85%8D%EF%BC%89/&via=http://yoursite.com" data-title="Twitter">
+              <i class="fa fa-twitter"></i>
+            </a>
+          </li>
+          <li>
+            <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://yoursite.com/2019/05/05/Mycat%20%E4%B8%8D%E9%80%82%E5%BA%94%E5%9C%BA%E6%99%AF%EF%BC%88%E6%94%B9%E9%80%A0%E5%B0%BD%E9%87%8F%E9%81%BF%E5%85%8D%EF%BC%89/" data-title="Google+">
+              <i class="fa fa-google-plus"></i>
+            </a>
+          </li>
+        </ul>
+     </div>
+</div>
+<div class="post-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;" id="wxShare-close">×</a>
+    <p>扫一扫，分享到微信</p>
+    <img src="//api.qrserver.com/v1/create-qr-code/?data=http://yoursite.com/2019/05/05/Mycat%20%E4%B8%8D%E9%80%82%E5%BA%94%E5%9C%BA%E6%99%AF%EF%BC%88%E6%94%B9%E9%80%A0%E5%B0%BD%E9%87%8F%E9%81%BF%E5%85%8D%EF%BC%89/" alt="微信分享二维码">
+</div>
+
+<div class="mask"></div>
+
+        
+        <ul class="article-footer-menu">
+            
+            
+  <li class="article-footer-tags">
+    <i class="fa fa-tags"></i>
+      
+    <a href="/tags/CSDN迁移/" class="color2">CSDN迁移</a>
+      
+  </li>
+
+        </ul>
+        
+    </footer>
+  </div>
+</article>
+
+
+    <aside class="post-toc-pos post-toc-top" id="post-toc">
+        <nav class="post-toc-wrap">
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#null"><span class="post-toc-text"></span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#1-非分片字段查询"><span class="post-toc-text">1.非分片字段查询</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#2-分页排序"><span class="post-toc-text">2.分页排序</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#3-任意表JOIN"><span class="post-toc-text">3.任意表JOIN</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#4-分布式事务"><span class="post-toc-text">4.分布式事务</span></a></li></ol>
+        </nav>
+    </aside>
+    
+
+<nav id="article-nav">
+  
+    <a href="/2019/05/05/%E4%BD%BF%E7%94%A8weave%E5%AE%9E%E7%8E%B0%E8%B7%A8%E4%B8%BB%E6%9C%BAdocker%E5%AE%B9%E5%99%A8%E4%BA%92%E8%81%94/" id="article-nav-newer" class="article-nav-link-wrap">
+
+      <span class="article-nav-title">
+        <i class="fa fa-hand-o-left" aria-hidden="true"></i>
+        
+          使用weave实现跨主机docker容器互联
+        
+      </span>
+    </a>
+  
+  
+    <a href="/2019/05/05/github+jenkins+maven+docker%E8%87%AA%E5%8A%A8%E5%8C%96%E6%9E%84%E5%BB%BA%E9%83%A8%E7%BD%B2/" id="article-nav-older" class="article-nav-link-wrap">
+      <span class="article-nav-title">github+jenkins+maven+docker自动化构建部署</span>
+      <i class="fa fa-hand-o-right" aria-hidden="true"></i>
+    </a>
+  
+</nav>
+
+
+
+    
+</section>
+        
+      </div>
+      <footer id="footer">
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      
+<p>
+    <span id="busuanzi_container_site_uv" style='display:none'>
+        总访客数：<span id="busuanzi_value_site_uv"></span>
+    </span>
+    <span id="busuanzi_container_site_pv" style='display:none'>
+        总访问量：<span id="busuanzi_value_site_pv"></span>
+    </span>
+</p>
+
+
+      <p>
+        Powered by  <a href="http://hexo.io/" target="_blank">Hexo</a>
+        Theme <a href="//github.com/wongminho/hexo-theme-miho" target="_blank">MiHo</a>
+      &copy; 2019 John Doe<br>
+      </p>
+    </div>
+  </div>
+</footer>
+    <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<script src="//cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+<script>
+  var mihoConfig = {
+      root: "http://yoursite.com",
+      animate: true,
+      isHome: false,
+      share: true,
+      reward: 1
+  }
+</script>
+<div class="sidebar">
+    <div id="sidebar-search" title="Search">
+        <i class="fa fa-search"></i>
+    </div>
+    <div id="sidebar-category" title="Categories">
+        <i class="fa fa-book"></i>
+    </div>
+    <div id="sidebar-tag" title="Tags">
+        <i class="fa fa-tags"></i>
+    </div>
+    <div id="sidebar-top">
+        <span class="sidebar-top-icon"><i class="fa fa-angle-up"></i></span>
+    </div>
+</div>
+<div class="sidebar-menu-box" id="sidebar-menu-box">
+    <div class="sidebar-menu-box-container">
+        <div id="sidebar-menu-box-categories">
+            
+        </div>
+        <div id="sidebar-menu-box-tags">
+            <a href="/tags/CSDN%E8%BF%81%E7%A7%BB/" style="font-size: 10px;">CSDN迁移</a>
+        </div>
+    </div>
+    <a href="javascript:;" class="sidebar-menu-box-close">&times;</a>
+</div>
+<div class="mobile-header-menu-nav" id="mobile-header-menu-nav">
+    <div class="mobile-header-menu-container">
+        <span class="title">Menus</span>
+        <ul class="mobile-header-menu-navbar">
+            
+            <li>
+                <a  href="/">
+                    <i class="fa fa-home"></i><span>Home</span>
+                </a>
+            </li>
+            
+            <li>
+                <a  href="/archives">
+                    <i class="fa fa-archive"></i><span>Archives</span>
+                </a>
+            </li>
+            
+            <li>
+                <a  href="/about">
+                    <i class="fa fa-user"></i><span>About</span>
+                </a>
+            </li>
+            
+        </ul>
+    </div>
+    <div class="mobile-header-tag-container">
+        <span class="title">Tags</span>
+        <div id="mobile-header-container-tags">
+            <a href="/tags/CSDN%E8%BF%81%E7%A7%BB/" style="font-size: 10px;">CSDN迁移</a>
+        </div>
+    </div>
+</div>
+<div class="search-wrap">
+    <span class="search-close">&times;</span>
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+            <i class="icon icon-lg icon-chevron-left"></i>
+        </a>
+        <input class="search-field" placeholder="Search..." id="keywords">
+        <a id="search-submit" href="javascript:;">
+            <i class="fa fa-search"></i>
+        </a>
+    <div class="search-container" id="search-container">
+        <ul class="search-result" id="search-result">
+        </ul>
+    </div>
+</div>
+
+<div id="search-tpl">
+    <li class="search-result-item">
+        <a href="{url}" class="search-item-li">
+            <span class="search-item-li-title" title="{title}">{title}</span>
+        </a>
+    </li>
+</div>
+
+<script src="/js/search.js"></script>
+
+
+<script src="/js/main.js"></script>
+
+
+
+  <script src="//cdn.bootcss.com/particles.js/2.0.0/particles.min.js"></script>
+  <div id="particles"></div>
+  
+<script src="/js/particles.js"></script>
+
+
+
+
+
+
+
+
+  
+<link rel="stylesheet" href="//cdn.bootcss.com/animate.css/3.5.0/animate.min.css">
+
+  <script src="//cdn.bootcss.com/scrollReveal.js/3.0.5/scrollreveal.js"></script>
+  
+<script src="/js/animate.js"></script>
+
+
+
+  
+<script src="/js/pop-img.js"></script>
+
+  <script>
+     $(".article-entry p img").popImg();
+  </script>
+
+  </div>
+</body>
+</html>

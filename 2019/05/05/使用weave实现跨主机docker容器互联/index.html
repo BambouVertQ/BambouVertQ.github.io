@@ -3,22 +3,29 @@
 <head>
   <meta charset="utf-8">
   
-  <title>Hello World | Hexo</title>
+  <title>使用weave实现跨主机docker容器互联 | Hexo</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   
     <meta name="keywords" content="MinHow,MinHow's Blog" />
   
-  <meta name="description" content="Welcome to Hexo! This is your very first post. Check documentation for more info. If you get any problems when using Hexo, you can find the answer in troubleshooting or you can ask me on GitHub. Quick">
+  <meta name="description" content="关于weave的原理不做细致的说明，如果想了解weave可以登陆官网：https:&#x2F;&#x2F;www.weave.works&#x2F;      In this post，使用阿里云3台ECS服务器进行weave搭建，并测试搭建weave后，跨主机docker容器的连通性。  场景： 10.162.204.252 node1 10.171.31.181 node2 10.171.19.139 node3">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Hello World">
-<meta property="og:url" content="http://yoursite.com/2019/12/25/hello-world/index.html">
+<meta property="og:title" content="使用weave实现跨主机docker容器互联">
+<meta property="og:url" content="http://yoursite.com/2019/05/05/%E4%BD%BF%E7%94%A8weave%E5%AE%9E%E7%8E%B0%E8%B7%A8%E4%B8%BB%E6%9C%BAdocker%E5%AE%B9%E5%99%A8%E4%BA%92%E8%81%94/index.html">
 <meta property="og:site_name" content="Hexo">
-<meta property="og:description" content="Welcome to Hexo! This is your very first post. Check documentation for more info. If you get any problems when using Hexo, you can find the answer in troubleshooting or you can ask me on GitHub. Quick">
+<meta property="og:description" content="关于weave的原理不做细致的说明，如果想了解weave可以登陆官网：https:&#x2F;&#x2F;www.weave.works&#x2F;      In this post，使用阿里云3台ECS服务器进行weave搭建，并测试搭建weave后，跨主机docker容器的连通性。  场景： 10.162.204.252 node1 10.171.31.181 node2 10.171.19.139 node3">
 <meta property="og:locale" content="en_US">
-<meta property="article:published_time" content="2019-12-25T06:19:43.901Z">
-<meta property="article:modified_time" content="2019-12-25T06:19:43.901Z">
+<meta property="og:image" content="http://images2015.cnblogs.com/blog/937245/201606/937245-20160608140905293-854369664.png">
+<meta property="og:image" content="http://images2015.cnblogs.com/blog/937245/201606/937245-20160608140930621-285442174.png">
+<meta property="og:image" content="http://images2015.cnblogs.com/blog/937245/201606/937245-20160608135906605-1526616716.png">
+<meta property="og:image" content="http://images2015.cnblogs.com/blog/937245/201606/937245-20160608135919355-1264170474.png">
+<meta property="og:image" content="http://images2015.cnblogs.com/blog/937245/201606/937245-20160608135940871-1465225370.png">
+<meta property="article:published_time" content="2019-05-05T06:42:27.000Z">
+<meta property="article:modified_time" content="2019-05-05T06:42:32.020Z">
 <meta property="article:author" content="John Doe">
+<meta property="article:tag" content="CSDN迁移">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://images2015.cnblogs.com/blog/937245/201606/937245-20160608140905293-854369664.png">
   
   
     <link rel="icon" href="/favicon.ico">
@@ -113,20 +120,20 @@
     </div>
 </header>
       <div class="outer">
-        <section id="main" class="body-wrap"><article id="post-hello-world" class="article article-type-post" itemscope itemprop="blogPost">
+        <section id="main" class="body-wrap"><article id="post-使用weave实现跨主机docker容器互联" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 class="post-title" itemprop="name">
-      Hello World
+      使用weave实现跨主机docker容器互联
     </h1>
     <div class="post-title-bar">
       <ul>
           
         <li>
-          <i class="fa fa-calendar"></i>  2019-12-25
+          <i class="fa fa-calendar"></i>  2019-05-05
         </li>
         <li>
           <i class="fa fa-eye"></i>
@@ -142,24 +149,29 @@
     <div class="article-entry post-content" itemprop="articleBody">
       
             
-            <p>Welcome to <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/" target="_blank" rel="noopener">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html" target="_blank" rel="noopener">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="noopener">GitHub</a>.</p>
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="string">"My New Post"</span></span><br></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/writing.html" target="_blank" rel="noopener">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/server.html" target="_blank" rel="noopener">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/generating.html" target="_blank" rel="noopener">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/one-command-deployment.html" target="_blank" rel="noopener">Deployment</a></p>
+            <p>   关于weave的原理不做细致的说明，如果想了解weave可以登陆官网：<a href="https://www.weave.works/" target="_blank" rel="noopener">https://www.weave.works/</a></p>
+<p> <img src="http://images2015.cnblogs.com/blog/937245/201606/937245-20160608140905293-854369664.png" alt=""></p>
+<p> <img src="http://images2015.cnblogs.com/blog/937245/201606/937245-20160608140930621-285442174.png" alt=""></p>
+<p> In this post，使用阿里云3台ECS服务器进行weave搭建，并测试搭建weave后，跨主机docker容器的连通性。</p>
+<p> 场景：<br> 10.162.204.252 node1<br> 10.171.31.181 node2<br> 10.171.19.139 node3</p>
+<p> 一、在所有需要跨主机互通的docker宿主机安装weave。<br>1.在node1上安装weave，并启动weave。<br> wget -O /usr/bin/weave <a href="https://raw.githubusercontent.com/zettio/weave/master/weave" target="_blank" rel="noopener">https://raw.githubusercontent.com/zettio/weave/master/weave</a><br> chmod +x /usr/bin/weave<br> weave launch</p>
+<p> *注释：在阿里云ECS执行weave launch启动会报错，请在启动的时候加–ipalloc-range 172.16.0.0/12，由于默认ip地址为10段。</p>
+<p> 2.在node2上安装weave，并启动weave，并连接node1，如果有多个，可以在连接的时候指定多个。<br> wget -O /usr/bin/weave <a href="https://raw.githubusercontent.com/zettio/weave/master/weave" target="_blank" rel="noopener">https://raw.githubusercontent.com/zettio/weave/master/weave</a><br> chmod +x /usr/bin/weave<br> weave launch 10.162.204.252 –ipalloc-range 172.16.0.0/12</p>
+<p> 3.在node3上安装weave，并启动weave，并连接node1，如果有多个，可以在连接的时候指定多个。<br> wget -O /usr/bin/weave <a href="https://raw.githubusercontent.com/zettio/weave/master/weave" target="_blank" rel="noopener">https://raw.githubusercontent.com/zettio/weave/master/weave</a><br> chmod +x /usr/bin/weave<br> weave launch 10.162.204.252 10.171.31.181 –ipalloc-range 172.16.0.0/12</p>
+<p> 二、在所有需要跨主机互通的docker宿主机启动docker测试容器。<br>1.在node1上，启动一个测试容器，centos或者ubuntu都可以。<br> weave run 192.168.4.1/24 -it –name node1 ubuntu /bin/bash</p>
+<p> 2.在node2上，启动一个测试容器，centos或者ubuntu都可以。<br> weave run 192.168.4.2/24 -it –name node2 centos /bin/bash</p>
+<p> 3.在node1上，启动一个测试容器，centos或者ubuntu都可以。<br> weave run 192.168.4.3/24 -it –name node3 centos /bin/bash</p>
+<p> 三、测试容器的互通性。<br>1.登陆node1上启动的测试容器，测试与node2和node3上docker容器的连通性。</p>
+<p> <img src="http://images2015.cnblogs.com/blog/937245/201606/937245-20160608135906605-1526616716.png" alt=""><br>2.登陆node2上启动的测试容器，测试与node1和node3上docker容器的连通性。</p>
+<p> <img src="http://images2015.cnblogs.com/blog/937245/201606/937245-20160608135919355-1264170474.png" alt=""></p>
+<p> 3.登陆node3上启动的测试容器，测试与node1和node2上docker容器的连通性。</p>
+<p> <img src="http://images2015.cnblogs.com/blog/937245/201606/937245-20160608135940871-1465225370.png" alt=""></p>
+<p> 到此，如果没有出现任何问题，跨主机的docker容器已经能够互联。</p>
 
             <div class="post-copyright">
     <div class="content">
-        <p>最后更新： 2019年12月25日 14:19</p>
-        <p>原始链接： <a class="post-url" href="/2019/12/25/hello-world/" title="Hello World">http://yoursite.com/2019/12/25/hello-world/</a></p>
+        <p>最后更新： 2019年05月05日 14:42</p>
+        <p>原始链接： <a class="post-url" href="/2019/05/05/%E4%BD%BF%E7%94%A8weave%E5%AE%9E%E7%8E%B0%E8%B7%A8%E4%B8%BB%E6%9C%BAdocker%E5%AE%B9%E5%99%A8%E4%BA%92%E8%81%94/" title="使用weave实现跨主机docker容器互联">http://yoursite.com/2019/05/05/%E4%BD%BF%E7%94%A8weave%E5%AE%9E%E7%8E%B0%E8%B7%A8%E4%B8%BB%E6%9C%BAdocker%E5%AE%B9%E5%99%A8%E4%BA%92%E8%81%94/</a></p>
         <footer>
             <a href="http://yoursite.com">
                 <img src="/images/logo.png" alt="John Doe">
@@ -216,7 +228,7 @@
     <div class="post-share-list" id="share-list">
         <ul class="share-icons">
           <li>
-            <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://yoursite.com/2019/12/25/hello-world/&title=《Hello World》 — Hexo&pic=http://yoursite.comimages/logo.png" data-title="微博">
+            <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://yoursite.com/2019/05/05/%E4%BD%BF%E7%94%A8weave%E5%AE%9E%E7%8E%B0%E8%B7%A8%E4%B8%BB%E6%9C%BAdocker%E5%AE%B9%E5%99%A8%E4%BA%92%E8%81%94/&title=《使用weave实现跨主机docker容器互联》 — Hexo&pic=http://yoursite.comimages/logo.png" data-title="微博">
               <i class="fa fa-weibo"></i>
             </a>
           </li>
@@ -226,22 +238,22 @@
             </a>
           </li>
           <li>
-            <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://yoursite.com/2019/12/25/hello-world/&title=《Hello World》 — Hexo&source=" data-title="QQ">
+            <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://yoursite.com/2019/05/05/%E4%BD%BF%E7%94%A8weave%E5%AE%9E%E7%8E%B0%E8%B7%A8%E4%B8%BB%E6%9C%BAdocker%E5%AE%B9%E5%99%A8%E4%BA%92%E8%81%94/&title=《使用weave实现跨主机docker容器互联》 — Hexo&source=" data-title="QQ">
               <i class="fa fa-qq"></i>
             </a>
           </li>
           <li>
-            <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://yoursite.com/2019/12/25/hello-world/" data-title="Facebook">
+            <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://yoursite.com/2019/05/05/%E4%BD%BF%E7%94%A8weave%E5%AE%9E%E7%8E%B0%E8%B7%A8%E4%B8%BB%E6%9C%BAdocker%E5%AE%B9%E5%99%A8%E4%BA%92%E8%81%94/" data-title="Facebook">
               <i class="fa fa-facebook"></i>
             </a>
           </li>
           <li>
-            <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《Hello World》 — Hexo&url=http://yoursite.com/2019/12/25/hello-world/&via=http://yoursite.com" data-title="Twitter">
+            <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《使用weave实现跨主机docker容器互联》 — Hexo&url=http://yoursite.com/2019/05/05/%E4%BD%BF%E7%94%A8weave%E5%AE%9E%E7%8E%B0%E8%B7%A8%E4%B8%BB%E6%9C%BAdocker%E5%AE%B9%E5%99%A8%E4%BA%92%E8%81%94/&via=http://yoursite.com" data-title="Twitter">
               <i class="fa fa-twitter"></i>
             </a>
           </li>
           <li>
-            <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://yoursite.com/2019/12/25/hello-world/" data-title="Google+">
+            <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://yoursite.com/2019/05/05/%E4%BD%BF%E7%94%A8weave%E5%AE%9E%E7%8E%B0%E8%B7%A8%E4%B8%BB%E6%9C%BAdocker%E5%AE%B9%E5%99%A8%E4%BA%92%E8%81%94/" data-title="Google+">
               <i class="fa fa-google-plus"></i>
             </a>
           </li>
@@ -251,7 +263,7 @@
 <div class="post-modal wx-share" id="wxShare">
     <a class="close" href="javascript:;" id="wxShare-close">×</a>
     <p>扫一扫，分享到微信</p>
-    <img src="//api.qrserver.com/v1/create-qr-code/?data=http://yoursite.com/2019/12/25/hello-world/" alt="微信分享二维码">
+    <img src="//api.qrserver.com/v1/create-qr-code/?data=http://yoursite.com/2019/05/05/%E4%BD%BF%E7%94%A8weave%E5%AE%9E%E7%8E%B0%E8%B7%A8%E4%B8%BB%E6%9C%BAdocker%E5%AE%B9%E5%99%A8%E4%BA%92%E8%81%94/" alt="微信分享二维码">
 </div>
 
 <div class="mask"></div>
@@ -260,6 +272,13 @@
         <ul class="article-footer-menu">
             
             
+  <li class="article-footer-tags">
+    <i class="fa fa-tags"></i>
+      
+    <a href="/tags/CSDN迁移/" class="color2">CSDN迁移</a>
+      
+  </li>
+
         </ul>
         
     </footer>
@@ -267,28 +286,22 @@
 </article>
 
 
-    <aside class="post-toc-pos post-toc-top" id="post-toc">
-        <nav class="post-toc-wrap">
-            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#Quick-Start"><span class="post-toc-text">Quick Start</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#Create-a-new-post"><span class="post-toc-text">Create a new post</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#Run-server"><span class="post-toc-text">Run server</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#Generate-static-files"><span class="post-toc-text">Generate static files</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#Deploy-to-remote-sites"><span class="post-toc-text">Deploy to remote sites</span></a></li></ol></li></ol>
-        </nav>
-    </aside>
-    
 
 <nav id="article-nav">
   
-    <a href="/2019/12/25/my-first-blog/" id="article-nav-newer" class="article-nav-link-wrap">
+    <a href="/2019/05/05/Linux%E9%80%9A%E8%BF%87PID%E6%9F%A5%E7%9C%8B%E8%BF%9B%E7%A8%8B%E5%AE%8C%E6%95%B4%E4%BF%A1%E6%81%AF/" id="article-nav-newer" class="article-nav-link-wrap">
 
       <span class="article-nav-title">
         <i class="fa fa-hand-o-left" aria-hidden="true"></i>
         
-          my first blog
+          Linux通过PID查看进程完整信息
         
       </span>
     </a>
   
   
-    <a href="/2019/05/05/hexo+github%E6%90%AD%E5%BB%BA%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2(%E8%B6%85%E8%AF%A6%E7%BB%86%E6%95%99%E7%A8%8B)/" id="article-nav-older" class="article-nav-link-wrap">
-      <span class="article-nav-title">hexo+github搭建个人博客(超详细教程)</span>
+    <a href="/2019/05/05/Mycat%20%E4%B8%8D%E9%80%82%E5%BA%94%E5%9C%BA%E6%99%AF%EF%BC%88%E6%94%B9%E9%80%A0%E5%B0%BD%E9%87%8F%E9%81%BF%E5%85%8D%EF%BC%89/" id="article-nav-older" class="article-nav-link-wrap">
+      <span class="article-nav-title">Mycat 不适应场景（改造尽量避免）</span>
       <i class="fa fa-hand-o-right" aria-hidden="true"></i>
     </a>
   
