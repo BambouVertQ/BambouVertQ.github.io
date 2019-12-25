@@ -6,24 +6,24 @@
   <title>使用weave实现跨主机docker容器互联 | Hexo</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   
-    <meta name="keywords" content="MinHow,MinHow's Blog" />
-  
-  <meta name="description" content="关于weave的原理不做细致的说明，如果想了解weave可以登陆官网：https:&#x2F;&#x2F;www.weave.works&#x2F;      In this post，使用阿里云3台ECS服务器进行weave搭建，并测试搭建weave后，跨主机docker容器的连通性。  场景： 10.162.204.252 node1 10.171.31.181 node2 10.171.19.139 node3">
+  <meta name="description" content="关于weave的原理不做细致的说明，如果想了解weave可以登陆官网：https:&#x2F;&#x2F;www.weave.works&#x2F;      In this post，使用阿里云3台ECS服务器进行weave搭建，并测试搭建weave后，跨主机docker容器的连通性。  场景： 10.162.204.252 node1 10.171.31.181 node2 10.171.19.139 node3  ##一">
 <meta property="og:type" content="article">
 <meta property="og:title" content="使用weave实现跨主机docker容器互联">
 <meta property="og:url" content="http://yoursite.com/2019/05/05/%E4%BD%BF%E7%94%A8weave%E5%AE%9E%E7%8E%B0%E8%B7%A8%E4%B8%BB%E6%9C%BAdocker%E5%AE%B9%E5%99%A8%E4%BA%92%E8%81%94/index.html">
 <meta property="og:site_name" content="Hexo">
-<meta property="og:description" content="关于weave的原理不做细致的说明，如果想了解weave可以登陆官网：https:&#x2F;&#x2F;www.weave.works&#x2F;      In this post，使用阿里云3台ECS服务器进行weave搭建，并测试搭建weave后，跨主机docker容器的连通性。  场景： 10.162.204.252 node1 10.171.31.181 node2 10.171.19.139 node3">
+<meta property="og:description" content="关于weave的原理不做细致的说明，如果想了解weave可以登陆官网：https:&#x2F;&#x2F;www.weave.works&#x2F;      In this post，使用阿里云3台ECS服务器进行weave搭建，并测试搭建weave后，跨主机docker容器的连通性。  场景： 10.162.204.252 node1 10.171.31.181 node2 10.171.19.139 node3  ##一">
 <meta property="og:locale" content="en_US">
 <meta property="og:image" content="http://images2015.cnblogs.com/blog/937245/201606/937245-20160608140905293-854369664.png">
 <meta property="og:image" content="http://images2015.cnblogs.com/blog/937245/201606/937245-20160608140930621-285442174.png">
+<meta property="og:image" content="http://pr0p9xkjy.bkt.clouddn.com/%E4%BD%BF%E7%94%A8weave%E5%AE%9E%E7%8E%B0%E8%B7%A8%E4%B8%BB%E6%9C%BAdocker%E5%AE%B9%E5%99%A8%E4%BA%92%E8%81%94/1.png">
+<meta property="og:image" content="http://pr0p9xkjy.bkt.clouddn.com/%E4%BD%BF%E7%94%A8weave%E5%AE%9E%E7%8E%B0%E8%B7%A8%E4%B8%BB%E6%9C%BAdocker%E5%AE%B9%E5%99%A8%E4%BA%92%E8%81%94/2.png">
 <meta property="og:image" content="http://images2015.cnblogs.com/blog/937245/201606/937245-20160608135906605-1526616716.png">
 <meta property="og:image" content="http://images2015.cnblogs.com/blog/937245/201606/937245-20160608135919355-1264170474.png">
 <meta property="og:image" content="http://images2015.cnblogs.com/blog/937245/201606/937245-20160608135940871-1465225370.png">
 <meta property="article:published_time" content="2019-05-05T06:42:27.000Z">
-<meta property="article:modified_time" content="2019-05-05T06:42:32.020Z">
+<meta property="article:modified_time" content="2019-12-25T10:38:31.958Z">
 <meta property="article:author" content="John Doe">
-<meta property="article:tag" content="CSDN迁移">
+<meta property="article:tag" content="Weave">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="http://images2015.cnblogs.com/blog/937245/201606/937245-20160608140905293-854369664.png">
   
@@ -52,23 +52,28 @@
         <div id="header-menu" class="header-menu-pos animated">
             <div class="header-menu-container">
                 <a href="/" class="left">
-                    <span class="site-title">MinHow&#39;s Blog</span>
+                    <span class="site-title"></span>
                 </a>
                 <nav id="header-menu-nav" class="right">
                     
                     <a  href="/">
-                        <i class="fa fa-home"></i>
-                        <span>Home</span>
+                        <i class="fa fa-h-square"></i>
+                        <span>主页</span>
+                    </a>
+                    
+                    <a  href="/life">
+                        <i class="fa fa-battery-three-quarters"></i>
+                        <span>岁月</span>
+                    </a>
+                    
+                    <a  href="/">
+                        <i class="fa fa-dot-circle-o"></i>
+                        <span>洞见</span>
                     </a>
                     
                     <a  href="/archives">
-                        <i class="fa fa-archive"></i>
-                        <span>Archives</span>
-                    </a>
-                    
-                    <a  href="/about">
-                        <i class="fa fa-user"></i>
-                        <span>About</span>
+                        <i class="fa fa-window-restore"></i>
+                        <span>归档</span>
                     </a>
                     
                 </nav>
@@ -80,23 +85,19 @@
         <div id="header-row">
             <div id="logo">
                 <a href="/">
-                    <img src="/images/logo.png" alt="logo">
+                    <img src="/images/logo.jpg" alt="logo">
                 </a>
             </div>
             <div class="header-info">
-                <div id="header-title">
-                    
-                    <h2>
-                        MinHow&#39;s Blog
-                    </h2>
-                    
-                </div>
-                <div id="header-description">
-                    
-                    <h3>
-                        一个专注 WEB 开发的技术博客
-                    </h3>
-                    
+                <!--<div id="header-title">-->
+                    <!---->
+                <!--</div>-->
+                <div id="header-description" style="height:24px;line-height:24px;">
+		 
+		    <div id="hitokoto" style="height:24px;line-height:24px;">
+		     远远地看，它就像一根孤独的琴弦紧绷在原野上，任凭风雨和岁月的弹拨。
+		    </div>
+                 
                 </div>
             </div>
             <nav class="header-nav">
@@ -132,6 +133,13 @@
     <div class="post-title-bar">
       <ul>
           
+              <li>
+                  <i class="fa fa-book"></i>
+                  
+                      <a href="/categories/Docker/">Docker</a>
+                  
+              </li>
+          
         <li>
           <i class="fa fa-calendar"></i>  2019-05-05
         </li>
@@ -149,18 +157,27 @@
     <div class="article-entry post-content" itemprop="articleBody">
       
             
-            <p>   关于weave的原理不做细致的说明，如果想了解weave可以登陆官网：<a href="https://www.weave.works/" target="_blank" rel="noopener">https://www.weave.works/</a></p>
+            <p>关于weave的原理不做细致的说明，如果想了解weave可以登陆官网：<a href="https://www.weave.works/" target="_blank" rel="noopener">https://www.weave.works/</a></p>
 <p> <img src="http://images2015.cnblogs.com/blog/937245/201606/937245-20160608140905293-854369664.png" alt=""></p>
 <p> <img src="http://images2015.cnblogs.com/blog/937245/201606/937245-20160608140930621-285442174.png" alt=""></p>
 <p> In this post，使用阿里云3台ECS服务器进行weave搭建，并测试搭建weave后，跨主机docker容器的连通性。</p>
 <p> 场景：<br> 10.162.204.252 node1<br> 10.171.31.181 node2<br> 10.171.19.139 node3</p>
-<p> 一、在所有需要跨主机互通的docker宿主机安装weave。<br>1.在node1上安装weave，并启动weave。<br> wget -O /usr/bin/weave <a href="https://raw.githubusercontent.com/zettio/weave/master/weave" target="_blank" rel="noopener">https://raw.githubusercontent.com/zettio/weave/master/weave</a><br> chmod +x /usr/bin/weave<br> weave launch</p>
-<p> *注释：在阿里云ECS执行weave launch启动会报错，请在启动的时候加–ipalloc-range 172.16.0.0/12，由于默认ip地址为10段。</p>
-<p> 2.在node2上安装weave，并启动weave，并连接node1，如果有多个，可以在连接的时候指定多个。<br> wget -O /usr/bin/weave <a href="https://raw.githubusercontent.com/zettio/weave/master/weave" target="_blank" rel="noopener">https://raw.githubusercontent.com/zettio/weave/master/weave</a><br> chmod +x /usr/bin/weave<br> weave launch 10.162.204.252 –ipalloc-range 172.16.0.0/12</p>
-<p> 3.在node3上安装weave，并启动weave，并连接node1，如果有多个，可以在连接的时候指定多个。<br> wget -O /usr/bin/weave <a href="https://raw.githubusercontent.com/zettio/weave/master/weave" target="_blank" rel="noopener">https://raw.githubusercontent.com/zettio/weave/master/weave</a><br> chmod +x /usr/bin/weave<br> weave launch 10.162.204.252 10.171.31.181 –ipalloc-range 172.16.0.0/12</p>
-<p> 二、在所有需要跨主机互通的docker宿主机启动docker测试容器。<br>1.在node1上，启动一个测试容器，centos或者ubuntu都可以。<br> weave run 192.168.4.1/24 -it –name node1 ubuntu /bin/bash</p>
-<p> 2.在node2上，启动一个测试容器，centos或者ubuntu都可以。<br> weave run 192.168.4.2/24 -it –name node2 centos /bin/bash</p>
-<p> 3.在node1上，启动一个测试容器，centos或者ubuntu都可以。<br> weave run 192.168.4.3/24 -it –name node3 centos /bin/bash</p>
+<p> ##一、在所有需要跨主机互通的docker宿主机安装weave。<br>###1.在node1上安装weave，并启动weave。  </p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ wget -O /usr/bin/weave https://raw.githubusercontent.com/zettio/weave/master/weave  </span><br><span class="line">$ chmod +x /usr/bin/weave  </span><br><span class="line">$ weave launch</span><br></pre></td></tr></table></figure>
+
+<p> *注释：在阿里云ECS执行weave launch启动会报错，请在启动的时候加–ipalloc-range 172.16.0.0/12，由于默认ip地址为10段。<br> *关于 172.16.0.1/12 如何查看<br> <img src="http://pr0p9xkjy.bkt.clouddn.com/%E4%BD%BF%E7%94%A8weave%E5%AE%9E%E7%8E%B0%E8%B7%A8%E4%B8%BB%E6%9C%BAdocker%E5%AE%B9%E5%99%A8%E4%BA%92%E8%81%94/1.png" alt=""><br> 容器启动命令<br>docker run –name bambou-weixin –net=weave -d -p 8900:8900 bambou-weixin</p>
+<p>Apollo配置(也可在yml配置文件中指定)<br>eureka.instance.preferIpAddress = true    (已ip 的形式注册到eureka)</p>
+<p>Linux 在demo.sh ( -Deureka.instance.ip-address) 指定eureka地址，避免其他主机服务无法获取不到配置文件 原因如下<br> <img src="http://pr0p9xkjy.bkt.clouddn.com/%E4%BD%BF%E7%94%A8weave%E5%AE%9E%E7%8E%B0%E8%B7%A8%E4%B8%BB%E6%9C%BAdocker%E5%AE%B9%E5%99%A8%E4%BA%92%E8%81%94/2.png" alt=""><br>解决方式 ：</p>
+<h4 id="JAVA-OPTS"><a href="#JAVA-OPTS" class="headerlink" title="JAVA OPTS"></a>JAVA OPTS</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">BASE_JAVA_OPTS=<span class="string">"-Denv=dev"</span></span><br><span class="line">CLIENT_JAVA_OPTS=<span class="string">"$BASE_JAVA_OPTS -Dapollo.meta=$config_server_url -Deureka.instance.ip-address=$&#123;这里填写你的ip地址&#125;"</span></span><br><span class="line">SERVER_JAVA_OPTS=<span class="string">"$BASE_JAVA_OPTS -Dspring.profiles.active=github -Deureka.service.url=$eureka_service_url -Deureka.instance.ip-address=$&#123;这里填写你的ip地址&#125;"</span></span><br><span class="line">PORTAL_JAVA_OPTS=<span class="string">"$BASE_JAVA_OPTS -Ddev_meta=$config_server_url -Dspring.profiles.active=github,auth -Deureka.instance.ip-address=$&#123;这里填写你的ip地址&#125;"</span></span><br></pre></td></tr></table></figure>
+
+
+<h3 id="2-在node2上安装weave，并启动weave，并连接node1，如果有多个，可以在连接的时候指定多个。"><a href="#2-在node2上安装weave，并启动weave，并连接node1，如果有多个，可以在连接的时候指定多个。" class="headerlink" title="2.在node2上安装weave，并启动weave，并连接node1，如果有多个，可以在连接的时候指定多个。"></a>2.在node2上安装weave，并启动weave，并连接node1，如果有多个，可以在连接的时候指定多个。</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ wget -O /usr/bin/weave https://raw.githubusercontent.com/zettio/weave/master/weave  </span><br><span class="line">$ chmod +x /usr/bin/weave  </span><br><span class="line">$ weave launch 10.162.204.252 --ipalloc-range 172.16.0.0/12</span><br></pre></td></tr></table></figure>
+
+
+<p> ###3.在node3上安装weave，并启动weave，并连接node1，如果有多个，可以在连接的时候指定多个。<br> <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">$ wget -O /usr/bin/weave https://raw.githubusercontent.com/zettio/weave/master/weave  </span><br><span class="line">$ chmod +x /usr/bin/weave  </span><br><span class="line">$ weave launch 10.162.204.252 10.171.31.181 --ipalloc-range 172.16.0.0/12</span><br><span class="line">$ weave launch 10.162.204.252 --ipalloc-range 172.16.0.0/12</span><br></pre></td></tr></table></figure></p>
+<p> ##二、在所有需要跨主机互通的docker宿主机启动docker测试容器。<br>###1.在node1上，启动一个测试容器，centos或者ubuntu都可以。<br> <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$  weave run 192.168.4.1/24 -it --name node1 ubuntu /bin/bash</span><br></pre></td></tr></table></figure></p>
+<p> ###2.在node2上，启动一个测试容器，centos或者ubuntu都可以。<br> <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$  weave run 192.168.4.2/24 -it --name node2 centos /bin/bash</span><br></pre></td></tr></table></figure></p>
+<p>###3.在node1上，启动一个测试容器，centos或者ubuntu都可以。<br> <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$  weave run 192.168.4.3/24 -it --name node3 centos /bin/bash</span><br></pre></td></tr></table></figure></p>
 <p> 三、测试容器的互通性。<br>1.登陆node1上启动的测试容器，测试与node2和node3上docker容器的连通性。</p>
 <p> <img src="http://images2015.cnblogs.com/blog/937245/201606/937245-20160608135906605-1526616716.png" alt=""><br>2.登陆node2上启动的测试容器，测试与node1和node3上docker容器的连通性。</p>
 <p> <img src="http://images2015.cnblogs.com/blog/937245/201606/937245-20160608135919355-1264170474.png" alt=""></p>
@@ -170,11 +187,11 @@
 
             <div class="post-copyright">
     <div class="content">
-        <p>最后更新： 2019年05月05日 14:42</p>
+        <p>最后更新： 2019年12月25日 18:38</p>
         <p>原始链接： <a class="post-url" href="/2019/05/05/%E4%BD%BF%E7%94%A8weave%E5%AE%9E%E7%8E%B0%E8%B7%A8%E4%B8%BB%E6%9C%BAdocker%E5%AE%B9%E5%99%A8%E4%BA%92%E8%81%94/" title="使用weave实现跨主机docker容器互联">http://yoursite.com/2019/05/05/%E4%BD%BF%E7%94%A8weave%E5%AE%9E%E7%8E%B0%E8%B7%A8%E4%B8%BB%E6%9C%BAdocker%E5%AE%B9%E5%99%A8%E4%BA%92%E8%81%94/</a></p>
         <footer>
             <a href="http://yoursite.com">
-                <img src="/images/logo.png" alt="John Doe">
+                <img src="/images/logo.jpg" alt="John Doe">
                 John Doe
             </a>
         </footer>
@@ -228,7 +245,7 @@
     <div class="post-share-list" id="share-list">
         <ul class="share-icons">
           <li>
-            <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://yoursite.com/2019/05/05/%E4%BD%BF%E7%94%A8weave%E5%AE%9E%E7%8E%B0%E8%B7%A8%E4%B8%BB%E6%9C%BAdocker%E5%AE%B9%E5%99%A8%E4%BA%92%E8%81%94/&title=《使用weave实现跨主机docker容器互联》 — Hexo&pic=http://yoursite.comimages/logo.png" data-title="微博">
+            <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://yoursite.com/2019/05/05/%E4%BD%BF%E7%94%A8weave%E5%AE%9E%E7%8E%B0%E8%B7%A8%E4%B8%BB%E6%9C%BAdocker%E5%AE%B9%E5%99%A8%E4%BA%92%E8%81%94/&title=《使用weave实现跨主机docker容器互联》 — Hexo&pic=https://image.mariojd.cn/happyjared/2019411/spring-boot-admin-example.jpg" data-title="微博">
               <i class="fa fa-weibo"></i>
             </a>
           </li>
@@ -275,7 +292,7 @@
   <li class="article-footer-tags">
     <i class="fa fa-tags"></i>
       
-    <a href="/tags/CSDN迁移/" class="color2">CSDN迁移</a>
+    <a href="/tags/Weave/" class="color1">Weave</a>
       
   </li>
 
@@ -286,6 +303,12 @@
 </article>
 
 
+    <aside class="post-toc-pos post-toc-top" id="post-toc">
+        <nav class="post-toc-wrap">
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#JAVA-OPTS"><span class="post-toc-text">JAVA OPTS</span></a></li></ol></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#2-在node2上安装weave，并启动weave，并连接node1，如果有多个，可以在连接的时候指定多个。"><span class="post-toc-text">2.在node2上安装weave，并启动weave，并连接node1，如果有多个，可以在连接的时候指定多个。</span></a>
+        </nav>
+    </aside>
+    
 
 <nav id="article-nav">
   
@@ -336,6 +359,7 @@
   </div>
 </footer>
     <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<script src="https://v1.hitokoto.cn/?encode=js&amp;select=%23hitokoto" defer=""></script>
 <script src="//cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
 <script>
   var mihoConfig = {
@@ -363,10 +387,10 @@
 <div class="sidebar-menu-box" id="sidebar-menu-box">
     <div class="sidebar-menu-box-container">
         <div id="sidebar-menu-box-categories">
-            
+            <a class="category-link" href="/categories/Docker/">Docker</a><a class="category-link" href="/categories/Linux/">Linux</a><a class="category-link" href="/categories/%E5%8D%9A%E5%AE%A2/">博客</a><a class="category-link" href="/categories/%E6%95%B0%E6%8D%AE%E5%BA%93%E4%B8%AD%E9%97%B4%E4%BB%B6/">数据库中间件</a><a class="category-link" href="/categories/%E8%87%AA%E5%8A%A8%E5%8C%96%E9%83%A8%E7%BD%B2/">自动化部署</a>
         </div>
         <div id="sidebar-menu-box-tags">
-            <a href="/tags/CSDN%E8%BF%81%E7%A7%BB/" style="font-size: 10px;">CSDN迁移</a>
+            <a href="/tags/MyCat/" style="font-size: 10px;">MyCat</a> <a href="/tags/PID/" style="font-size: 10px;">PID</a> <a href="/tags/Weave/" style="font-size: 10px;">Weave</a> <a href="/tags/hexo/" style="font-size: 10px;">hexo</a> <a href="/tags/jenkins/" style="font-size: 20px;">jenkins</a>
         </div>
     </div>
     <a href="javascript:;" class="sidebar-menu-box-close">&times;</a>
@@ -378,19 +402,25 @@
             
             <li>
                 <a  href="/">
-                    <i class="fa fa-home"></i><span>Home</span>
+                    <i class="fa fa-h-square"></i><span>主页</span>
+                </a>
+            </li>
+            
+            <li>
+                <a  href="/life">
+                    <i class="fa fa-battery-three-quarters"></i><span>岁月</span>
+                </a>
+            </li>
+            
+            <li>
+                <a  href="/">
+                    <i class="fa fa-dot-circle-o"></i><span>洞见</span>
                 </a>
             </li>
             
             <li>
                 <a  href="/archives">
-                    <i class="fa fa-archive"></i><span>Archives</span>
-                </a>
-            </li>
-            
-            <li>
-                <a  href="/about">
-                    <i class="fa fa-user"></i><span>About</span>
+                    <i class="fa fa-window-restore"></i><span>归档</span>
                 </a>
             </li>
             
@@ -399,7 +429,7 @@
     <div class="mobile-header-tag-container">
         <span class="title">Tags</span>
         <div id="mobile-header-container-tags">
-            <a href="/tags/CSDN%E8%BF%81%E7%A7%BB/" style="font-size: 10px;">CSDN迁移</a>
+            <a href="/tags/MyCat/" style="font-size: 10px;">MyCat</a> <a href="/tags/PID/" style="font-size: 10px;">PID</a> <a href="/tags/Weave/" style="font-size: 10px;">Weave</a> <a href="/tags/hexo/" style="font-size: 10px;">hexo</a> <a href="/tags/jenkins/" style="font-size: 20px;">jenkins</a>
         </div>
     </div>
 </div>

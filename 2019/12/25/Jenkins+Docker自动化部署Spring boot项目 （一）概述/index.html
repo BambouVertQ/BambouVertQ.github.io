@@ -3,24 +3,23 @@
 <head>
   <meta charset="utf-8">
   
-  <title>Linux通过PID查看进程完整信息 | Hexo</title>
+  <title>Jenkins+Docker自动化部署Spring boot项目 （一）概述 | Hexo</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   
-  <meta name="description" content="通过ps及top命令查看进程信息时，只能查到相对路径，查不到的进程的详细信息，如绝对路径等。  先通过top查看进程PID      这时，我们需要通过以下的方法来查看进程的详细信息：  Linux在启动一个进程时，系统会在&#x2F;proc下创建一个以PID命名的文件夹，在该文件夹下会有我们的进程的信息，其中包括一个名为exe的文件即记录了绝对路径，通过ll或ls –l命令即可查看。  ll &#x2F;proc">
+  <meta name="description" content="版权声明：本文为博主原创文章，未经博主允许不得转载。 https:&#x2F;&#x2F;blog.csdn.net&#x2F;liubingyu12345&#x2F;article&#x2F;details&#x2F;80703491    Jenkins+Docker自动化部署Spring boot项目（一）概述 我在之前写的博文中，写了如何用Dockerfile maven插件将Spring boot项目打成镜像包，然后开放远程机器的Docker远程">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Linux通过PID查看进程完整信息">
-<meta property="og:url" content="http://yoursite.com/2019/05/05/Linux%E9%80%9A%E8%BF%87PID%E6%9F%A5%E7%9C%8B%E8%BF%9B%E7%A8%8B%E5%AE%8C%E6%95%B4%E4%BF%A1%E6%81%AF/index.html">
+<meta property="og:title" content="Jenkins+Docker自动化部署Spring boot项目 （一）概述">
+<meta property="og:url" content="http://yoursite.com/2019/12/25/Jenkins+Docker%E8%87%AA%E5%8A%A8%E5%8C%96%E9%83%A8%E7%BD%B2Spring%20boot%E9%A1%B9%E7%9B%AE%20%EF%BC%88%E4%B8%80%EF%BC%89%E6%A6%82%E8%BF%B0/index.html">
 <meta property="og:site_name" content="Hexo">
-<meta property="og:description" content="通过ps及top命令查看进程信息时，只能查到相对路径，查不到的进程的详细信息，如绝对路径等。  先通过top查看进程PID      这时，我们需要通过以下的方法来查看进程的详细信息：  Linux在启动一个进程时，系统会在&#x2F;proc下创建一个以PID命名的文件夹，在该文件夹下会有我们的进程的信息，其中包括一个名为exe的文件即记录了绝对路径，通过ll或ls –l命令即可查看。  ll &#x2F;proc">
+<meta property="og:description" content="版权声明：本文为博主原创文章，未经博主允许不得转载。 https:&#x2F;&#x2F;blog.csdn.net&#x2F;liubingyu12345&#x2F;article&#x2F;details&#x2F;80703491    Jenkins+Docker自动化部署Spring boot项目（一）概述 我在之前写的博文中，写了如何用Dockerfile maven插件将Spring boot项目打成镜像包，然后开放远程机器的Docker远程">
 <meta property="og:locale" content="en_US">
-<meta property="og:image" content="https://img-blog.csdn.net/20151130162028057">
-<meta property="og:image" content="https://img-blog.csdn.net/20151130162034546">
-<meta property="article:published_time" content="2019-05-05T06:48:17.000Z">
-<meta property="article:modified_time" content="2019-12-25T10:34:02.193Z">
+<meta property="og:image" content="https://img-blog.csdn.net/20180615113128373?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2xpdWJpbmd5dTEyMzQ1/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70">
+<meta property="article:published_time" content="2019-12-25T10:36:17.228Z">
+<meta property="article:modified_time" content="2019-12-25T10:39:14.373Z">
 <meta property="article:author" content="John Doe">
-<meta property="article:tag" content="PID">
+<meta property="article:tag" content="jenkins">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://img-blog.csdn.net/20151130162028057">
+<meta name="twitter:image" content="https://img-blog.csdn.net/20180615113128373?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2xpdWJpbmd5dTEyMzQ1/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70">
   
   
     <link rel="icon" href="/favicon.ico">
@@ -116,14 +115,14 @@
     </div>
 </header>
       <div class="outer">
-        <section id="main" class="body-wrap"><article id="post-Linux通过PID查看进程完整信息" class="article article-type-post" itemscope itemprop="blogPost">
+        <section id="main" class="body-wrap"><article id="post-Jenkins+Docker自动化部署Spring boot项目 （一）概述" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 class="post-title" itemprop="name">
-      Linux通过PID查看进程完整信息
+      Jenkins+Docker自动化部署Spring boot项目 （一）概述
     </h1>
     <div class="post-title-bar">
       <ul>
@@ -131,12 +130,12 @@
               <li>
                   <i class="fa fa-book"></i>
                   
-                      <a href="/categories/Linux/">Linux</a>
+                      <a href="/categories/Docker/">Docker</a>
                   
               </li>
           
         <li>
-          <i class="fa fa-calendar"></i>  2019-05-05
+          <i class="fa fa-calendar"></i>  2019-12-25
         </li>
         <li>
           <i class="fa fa-eye"></i>
@@ -152,23 +151,30 @@
     <div class="article-entry post-content" itemprop="articleBody">
       
             
-            <p>通过ps及top命令查看进程信息时，只能查到相对路径，查不到的进程的详细信息，如绝对路径等。</p>
-<p> 先通过top查看进程PID</p>
-<p> <img src="https://img-blog.csdn.net/20151130162028057" alt="">  </p>
-<p> 这时，我们需要通过以下的方法来查看进程的详细信息：</p>
-<p> <a href="http://lib.csdn.net/base/linux" target="_blank" rel="noopener">Linux</a>在启动一个进程时，系统会在/proc下创建一个以PID命名的文件夹，在该文件夹下会有我们的进程的信息，其中包括一个名为exe的文件即记录了绝对路径，通过ll或ls –l命令即可查看。</p>
-<p> ll /proc/PID</p>
-<p> <img src="https://img-blog.csdn.net/20151130162034546" alt="">  </p>
-<p> cwd符号链接的是进程运行目录；</p>
-<p> exe符号连接就是执行程序的绝对路径；</p>
-<p> cmdline就是程序运行时输入的命令行命令；</p>
-<p> environ记录了进程运行时的环境变量；</p>
-<p> fd目录下是进程打开或使用的文件的符号连接。</p>
+            <p>版权声明：本文为博主原创文章，未经博主允许不得转载。 <a href="https://blog.csdn.net/liubingyu12345/article/details/80703491" target="_blank" rel="noopener">https://blog.csdn.net/liubingyu12345/article/details/80703491</a>   </p>
+<h1 id="Jenkins-Docker自动化部署Spring-boot项目（一）概述"><a href="#Jenkins-Docker自动化部署Spring-boot项目（一）概述" class="headerlink" title="Jenkins+Docker自动化部署Spring boot项目（一）概述"></a>Jenkins+Docker自动化部署Spring boot项目（一）概述</h1><p> 我在之前写的博文中，写了如何用Dockerfile maven插件将Spring boot项目打成镜像包，然后开放远程机器的Docker远程访问能力，通过mvn命令上传本地的镜像文件到远程机器上。其实这种做法是比较非主流的，只适合demo，自己拿来熟悉下Docker部署。<br> 目前主流做法是配合Jenkins实现自动部署，流程大概如下：   </p>
+<ol>
+<li>git提交tag/jenkins点击构建   </li>
+<li>jenkins执行用户配置好的构建计划（下面的2.x步骤都是由jenkins读取构建计划自动执行）   </li>
+<li>1 从git仓库中拉取指定代码   </li>
+<li>2 执行mvn package打包命令   </li>
+<li>3 执行mvn dockerfile:build打成镜像命令   </li>
+<li>4 上传镜像文件到搭建好的私有docker库（没有私有库，也可以用大厂提供的公有库，如docker hub,163 hub）   </li>
+<li>5 ssh免密登录部署机器，执行自己预先写好的脚本文件，完成下载镜像，执行镜像的命令   </li>
+<li>6 ssh退出   </li>
+<li>jenkins给出执行报告</li>
+</ol>
+<ul>
+<li><strong>给出一张我自己画的图来简单描述下我搭建的部署流程(比较乱，随意 看看)</strong><br> <img src="https://img-blog.csdn.net/20180615113128373?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2xpdWJpbmd5dTEyMzQ1/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" alt="这里写图片描述">  </li>
+</ul>
+<hr>
+<h2 id="前置条件"><a href="#前置条件" class="headerlink" title="前置条件"></a>前置条件</h2><p> 两台机器，已配置好docker环境，一台用来部署Jenkins，一台用来部署业务系统，docker私有库可以部署在任意一台机器 上。<br> 业务系统是spring boot项目，已集成dockerfile maven插件，且配置正确</p>
+<h2 id="说明"><a href="#说明" class="headerlink" title="说明"></a>说明</h2><p> 我会先介绍通过docker镜像搭建配置jenkins，再搭建docker私有库，使用的是vmware公司开源的habor，然后配置jenkins和业务系统的dockerfile，使自动化部署流程走起来。<br> 暂定下面章节如下：<br> （二） jenkins搭建配置<br> （三） 搭建docker私有库harbor<br> （四） 配置自动化部署流程</p>
 
             <div class="post-copyright">
     <div class="content">
-        <p>最后更新： 2019年12月25日 18:34</p>
-        <p>原始链接： <a class="post-url" href="/2019/05/05/Linux%E9%80%9A%E8%BF%87PID%E6%9F%A5%E7%9C%8B%E8%BF%9B%E7%A8%8B%E5%AE%8C%E6%95%B4%E4%BF%A1%E6%81%AF/" title="Linux通过PID查看进程完整信息">http://yoursite.com/2019/05/05/Linux%E9%80%9A%E8%BF%87PID%E6%9F%A5%E7%9C%8B%E8%BF%9B%E7%A8%8B%E5%AE%8C%E6%95%B4%E4%BF%A1%E6%81%AF/</a></p>
+        <p>最后更新： 2019年12月25日 18:39</p>
+        <p>原始链接： <a class="post-url" href="/2019/12/25/Jenkins+Docker%E8%87%AA%E5%8A%A8%E5%8C%96%E9%83%A8%E7%BD%B2Spring%20boot%E9%A1%B9%E7%9B%AE%20%EF%BC%88%E4%B8%80%EF%BC%89%E6%A6%82%E8%BF%B0/" title="Jenkins+Docker自动化部署Spring boot项目 （一）概述">http://yoursite.com/2019/12/25/Jenkins+Docker%E8%87%AA%E5%8A%A8%E5%8C%96%E9%83%A8%E7%BD%B2Spring%20boot%E9%A1%B9%E7%9B%AE%20%EF%BC%88%E4%B8%80%EF%BC%89%E6%A6%82%E8%BF%B0/</a></p>
         <footer>
             <a href="http://yoursite.com">
                 <img src="/images/logo.jpg" alt="John Doe">
@@ -225,7 +231,7 @@
     <div class="post-share-list" id="share-list">
         <ul class="share-icons">
           <li>
-            <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://yoursite.com/2019/05/05/Linux%E9%80%9A%E8%BF%87PID%E6%9F%A5%E7%9C%8B%E8%BF%9B%E7%A8%8B%E5%AE%8C%E6%95%B4%E4%BF%A1%E6%81%AF/&title=《Linux通过PID查看进程完整信息》 — Hexo&pic=https://image.mariojd.cn/happyjared/2019413/jasypt-spring-boot-example.jpg" data-title="微博">
+            <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://yoursite.com/2019/12/25/Jenkins+Docker%E8%87%AA%E5%8A%A8%E5%8C%96%E9%83%A8%E7%BD%B2Spring%20boot%E9%A1%B9%E7%9B%AE%20%EF%BC%88%E4%B8%80%EF%BC%89%E6%A6%82%E8%BF%B0/&title=《Jenkins+Docker自动化部署Spring boot项目 （一）概述》 — Hexo&pic=https://image.mariojd.cn/happyjared/2019411/spring-boot-admin-example.jpg" data-title="微博">
               <i class="fa fa-weibo"></i>
             </a>
           </li>
@@ -235,22 +241,22 @@
             </a>
           </li>
           <li>
-            <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://yoursite.com/2019/05/05/Linux%E9%80%9A%E8%BF%87PID%E6%9F%A5%E7%9C%8B%E8%BF%9B%E7%A8%8B%E5%AE%8C%E6%95%B4%E4%BF%A1%E6%81%AF/&title=《Linux通过PID查看进程完整信息》 — Hexo&source=" data-title="QQ">
+            <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://yoursite.com/2019/12/25/Jenkins+Docker%E8%87%AA%E5%8A%A8%E5%8C%96%E9%83%A8%E7%BD%B2Spring%20boot%E9%A1%B9%E7%9B%AE%20%EF%BC%88%E4%B8%80%EF%BC%89%E6%A6%82%E8%BF%B0/&title=《Jenkins+Docker自动化部署Spring boot项目 （一）概述》 — Hexo&source=" data-title="QQ">
               <i class="fa fa-qq"></i>
             </a>
           </li>
           <li>
-            <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://yoursite.com/2019/05/05/Linux%E9%80%9A%E8%BF%87PID%E6%9F%A5%E7%9C%8B%E8%BF%9B%E7%A8%8B%E5%AE%8C%E6%95%B4%E4%BF%A1%E6%81%AF/" data-title="Facebook">
+            <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://yoursite.com/2019/12/25/Jenkins+Docker%E8%87%AA%E5%8A%A8%E5%8C%96%E9%83%A8%E7%BD%B2Spring%20boot%E9%A1%B9%E7%9B%AE%20%EF%BC%88%E4%B8%80%EF%BC%89%E6%A6%82%E8%BF%B0/" data-title="Facebook">
               <i class="fa fa-facebook"></i>
             </a>
           </li>
           <li>
-            <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《Linux通过PID查看进程完整信息》 — Hexo&url=http://yoursite.com/2019/05/05/Linux%E9%80%9A%E8%BF%87PID%E6%9F%A5%E7%9C%8B%E8%BF%9B%E7%A8%8B%E5%AE%8C%E6%95%B4%E4%BF%A1%E6%81%AF/&via=http://yoursite.com" data-title="Twitter">
+            <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《Jenkins+Docker自动化部署Spring boot项目 （一）概述》 — Hexo&url=http://yoursite.com/2019/12/25/Jenkins+Docker%E8%87%AA%E5%8A%A8%E5%8C%96%E9%83%A8%E7%BD%B2Spring%20boot%E9%A1%B9%E7%9B%AE%20%EF%BC%88%E4%B8%80%EF%BC%89%E6%A6%82%E8%BF%B0/&via=http://yoursite.com" data-title="Twitter">
               <i class="fa fa-twitter"></i>
             </a>
           </li>
           <li>
-            <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://yoursite.com/2019/05/05/Linux%E9%80%9A%E8%BF%87PID%E6%9F%A5%E7%9C%8B%E8%BF%9B%E7%A8%8B%E5%AE%8C%E6%95%B4%E4%BF%A1%E6%81%AF/" data-title="Google+">
+            <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://yoursite.com/2019/12/25/Jenkins+Docker%E8%87%AA%E5%8A%A8%E5%8C%96%E9%83%A8%E7%BD%B2Spring%20boot%E9%A1%B9%E7%9B%AE%20%EF%BC%88%E4%B8%80%EF%BC%89%E6%A6%82%E8%BF%B0/" data-title="Google+">
               <i class="fa fa-google-plus"></i>
             </a>
           </li>
@@ -260,7 +266,7 @@
 <div class="post-modal wx-share" id="wxShare">
     <a class="close" href="javascript:;" id="wxShare-close">×</a>
     <p>扫一扫，分享到微信</p>
-    <img src="//api.qrserver.com/v1/create-qr-code/?data=http://yoursite.com/2019/05/05/Linux%E9%80%9A%E8%BF%87PID%E6%9F%A5%E7%9C%8B%E8%BF%9B%E7%A8%8B%E5%AE%8C%E6%95%B4%E4%BF%A1%E6%81%AF/" alt="微信分享二维码">
+    <img src="//api.qrserver.com/v1/create-qr-code/?data=http://yoursite.com/2019/12/25/Jenkins+Docker%E8%87%AA%E5%8A%A8%E5%8C%96%E9%83%A8%E7%BD%B2Spring%20boot%E9%A1%B9%E7%9B%AE%20%EF%BC%88%E4%B8%80%EF%BC%89%E6%A6%82%E8%BF%B0/" alt="微信分享二维码">
 </div>
 
 <div class="mask"></div>
@@ -272,7 +278,7 @@
   <li class="article-footer-tags">
     <i class="fa fa-tags"></i>
       
-    <a href="/tags/PID/" class="color4">PID</a>
+    <a href="/tags/jenkins/" class="color3">jenkins</a>
       
   </li>
 
@@ -283,22 +289,18 @@
 </article>
 
 
+    <aside class="post-toc-pos post-toc-top" id="post-toc">
+        <nav class="post-toc-wrap">
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#Jenkins-Docker自动化部署Spring-boot项目（一）概述"><span class="post-toc-text">Jenkins+Docker自动化部署Spring boot项目（一）概述</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#前置条件"><span class="post-toc-text">前置条件</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#说明"><span class="post-toc-text">说明</span></a></li></ol></li></ol>
+        </nav>
+    </aside>
+    
 
 <nav id="article-nav">
   
-    <a href="/2019/05/05/hexo+github%E6%90%AD%E5%BB%BA%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2(%E8%B6%85%E8%AF%A6%E7%BB%86%E6%95%99%E7%A8%8B)/" id="article-nav-newer" class="article-nav-link-wrap">
-
-      <span class="article-nav-title">
-        <i class="fa fa-hand-o-left" aria-hidden="true"></i>
-        
-          hexo+github搭建个人博客(超详细教程)
-        
-      </span>
-    </a>
   
-  
-    <a href="/2019/05/05/%E4%BD%BF%E7%94%A8weave%E5%AE%9E%E7%8E%B0%E8%B7%A8%E4%B8%BB%E6%9C%BAdocker%E5%AE%B9%E5%99%A8%E4%BA%92%E8%81%94/" id="article-nav-older" class="article-nav-link-wrap">
-      <span class="article-nav-title">使用weave实现跨主机docker容器互联</span>
+    <a href="/2019/12/25/Jenkins+Docker%E8%87%AA%E5%8A%A8%E5%8C%96%E9%83%A8%E7%BD%B2Spring%20boot%E9%A1%B9%E7%9B%AE%20%EF%BC%88%E4%B8%89%EF%BC%89%E6%90%AD%E5%BB%BAjenkins/" id="article-nav-older" class="article-nav-link-wrap">
+      <span class="article-nav-title">Jenkins+Docker自动化部署Spring boot项目 （三）搭建jenkins</span>
       <i class="fa fa-hand-o-right" aria-hidden="true"></i>
     </a>
   
