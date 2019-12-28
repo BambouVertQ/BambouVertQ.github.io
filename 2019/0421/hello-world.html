@@ -3,25 +3,23 @@
 <head>
   <meta charset="utf-8">
   
-  <title>Jenkins+Docker自动化部署Spring boot项目 （一）概述 | 仙陶悟-博客</title>
+  <title>Hello World | 仙陶悟-博客</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   
     <meta name="keywords" content="仙陶悟" />
   
-  <meta name="description" content="版权声明：本文为博主原创文章，未经博主允许不得转载。 https:&#x2F;&#x2F;blog.csdn.net&#x2F;liubingyu12345&#x2F;article&#x2F;details&#x2F;80703491    Jenkins+Docker自动化部署Spring boot项目（一）概述 我在之前写的博文中，写了如何用Dockerfile maven插件将Spring boot项目打成镜像包，然后开放远程机器的Docker远程">
+  <meta name="description" content="Welcome to Hexo! This is your very first post. Check documentation for more info. If you get any problems when using Hexo, you can find the answer in troubleshooting or you can ask me on GitHub. Quick">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Jenkins+Docker自动化部署Spring boot项目 （一）概述">
-<meta property="og:url" content="http://yoursite.com/2019/12/25/Jenkins+Docker%E8%87%AA%E5%8A%A8%E5%8C%96%E9%83%A8%E7%BD%B2Spring%20boot%E9%A1%B9%E7%9B%AE%20%EF%BC%88%E4%B8%80%EF%BC%89%E6%A6%82%E8%BF%B0/index.html">
+<meta property="og:title" content="Hello World">
+<meta property="og:url" content="http://yoursite.com/2019/0421/hello-world.html">
 <meta property="og:site_name" content="仙陶悟-博客">
-<meta property="og:description" content="版权声明：本文为博主原创文章，未经博主允许不得转载。 https:&#x2F;&#x2F;blog.csdn.net&#x2F;liubingyu12345&#x2F;article&#x2F;details&#x2F;80703491    Jenkins+Docker自动化部署Spring boot项目（一）概述 我在之前写的博文中，写了如何用Dockerfile maven插件将Spring boot项目打成镜像包，然后开放远程机器的Docker远程">
+<meta property="og:description" content="Welcome to Hexo! This is your very first post. Check documentation for more info. If you get any problems when using Hexo, you can find the answer in troubleshooting or you can ask me on GitHub. Quick">
 <meta property="og:locale" content="en_US">
-<meta property="og:image" content="http://118.31.46.199/image/2019/12/27/20180615113128373.png">
-<meta property="article:published_time" content="2019-12-25T10:36:17.228Z">
-<meta property="article:modified_time" content="2019-12-28T13:22:25.537Z">
+<meta property="article:published_time" content="2019-04-21T07:23:00.000Z">
+<meta property="article:modified_time" content="2019-12-28T14:06:49.889Z">
 <meta property="article:author" content="Qing Cao">
-<meta property="article:tag" content="jenkins">
+<meta property="article:tag" content="仙陶悟">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="http://118.31.46.199/image/2019/12/27/20180615113128373.png">
   
   
     <link rel="icon" href="/favicon.ico">
@@ -117,27 +115,20 @@
     </div>
 </header>
       <div class="outer">
-        <section id="main" class="body-wrap"><article id="post-Jenkins+Docker自动化部署Spring boot项目 （一）概述" class="article article-type-post" itemscope itemprop="blogPost">
+        <section id="main" class="body-wrap"><article id="post-hello world" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 class="post-title" itemprop="name">
-      Jenkins+Docker自动化部署Spring boot项目 （一）概述
+      Hello World
     </h1>
     <div class="post-title-bar">
       <ul>
           
-              <li>
-                  <i class="fa fa-book"></i>
-                  
-                      <a href="/categories/Docker/">Docker</a>
-                  
-              </li>
-          
         <li>
-          <i class="fa fa-calendar"></i>  2019-12-25
+          <i class="fa fa-calendar"></i>  2019-04-21
         </li>
         <li>
           <i class="fa fa-eye"></i>
@@ -153,33 +144,24 @@
     <div class="article-entry post-content" itemprop="articleBody">
       
             
-            <p>版权声明：本文为博主原创文章，未经博主允许不得转载。 <a href="https://blog.csdn.net/liubingyu12345/article/details/80703491" target="_blank" rel="noopener">https://blog.csdn.net/liubingyu12345/article/details/80703491</a>   </p>
-<h1 id="Jenkins-Docker自动化部署Spring-boot项目（一）概述"><a href="#Jenkins-Docker自动化部署Spring-boot项目（一）概述" class="headerlink" title="Jenkins+Docker自动化部署Spring boot项目（一）概述"></a>Jenkins+Docker自动化部署Spring boot项目（一）概述</h1><p> 我在之前写的博文中，写了如何用Dockerfile maven插件将Spring boot项目打成镜像包，然后开放远程机器的Docker远程访问能力，通过mvn命令上传本地的镜像文件到远程机器上。其实这种做法是比较非主流的，只适合demo，自己拿来熟悉下Docker部署。<br> 目前主流做法是配合Jenkins实现自动部署，流程大概如下：   </p>
-<ol>
-<li>git提交tag/jenkins点击构建   </li>
-<li>jenkins执行用户配置好的构建计划（下面的2.x步骤都是由jenkins读取构建计划自动执行）   </li>
-<li>1 从git仓库中拉取指定代码   </li>
-<li>2 执行mvn package打包命令   </li>
-<li>3 执行mvn dockerfile:build打成镜像命令   </li>
-<li>4 上传镜像文件到搭建好的私有docker库（没有私有库，也可以用大厂提供的公有库，如docker hub,163 hub）   </li>
-<li>5 ssh免密登录部署机器，执行自己预先写好的脚本文件，完成下载镜像，执行镜像的命令   </li>
-<li>6 ssh退出   </li>
-<li>jenkins给出执行报告</li>
-</ol>
-<ul>
-<li><strong>给出一张我自己画的图来简单描述下我搭建的部署流程(比较乱，随意 看看)</strong> <img src="http://118.31.46.199/image/2019/12/27/20180615113128373.png" class="post-image" title ="docker部署流程图" alt="docker部署流程图"/>
+            <p>Welcome to <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/" target="_blank" rel="noopener">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html" target="_blank" rel="noopener">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="noopener">GitHub</a>.</p>
+<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="string">"My New Post"</span></span><br></pre></td></tr></table></figure>
 
+<p>More info: <a href="https://hexo.io/docs/writing.html" target="_blank" rel="noopener">Writing</a></p>
+<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
 
-</li>
-</ul>
-<hr>
-<h2 id="前置条件"><a href="#前置条件" class="headerlink" title="前置条件"></a>前置条件</h2><p> 两台机器，已配置好docker环境，一台用来部署Jenkins，一台用来部署业务系统，docker私有库可以部署在任意一台机器 上。<br> 业务系统是spring boot项目，已集成dockerfile maven插件，且配置正确</p>
-<h2 id="说明"><a href="#说明" class="headerlink" title="说明"></a>说明</h2><p> 我会先介绍通过docker镜像搭建配置jenkins，再搭建docker私有库，使用的是vmware公司开源的habor，然后配置jenkins和业务系统的dockerfile，使自动化部署流程走起来。<br> 暂定下面章节如下：<br> （二） jenkins搭建配置<br> （三） 搭建docker私有库harbor<br> （四） 配置自动化部署流程</p>
+<p>More info: <a href="https://hexo.io/docs/server.html" target="_blank" rel="noopener">Server</a></p>
+<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
+
+<p>More info: <a href="https://hexo.io/docs/generating.html" target="_blank" rel="noopener">Generating</a></p>
+<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
+
+<p>More info: <a href="https://hexo.io/docs/deployment.html" target="_blank" rel="noopener">Deployment</a></p>
 
             <div class="post-copyright">
     <div class="content">
-        <p>最后更新： 2019年12月28日 21:22</p>
-        <p>原始链接： <a class="post-url" href="/2019/12/25/Jenkins+Docker%E8%87%AA%E5%8A%A8%E5%8C%96%E9%83%A8%E7%BD%B2Spring%20boot%E9%A1%B9%E7%9B%AE%20%EF%BC%88%E4%B8%80%EF%BC%89%E6%A6%82%E8%BF%B0/" title="Jenkins+Docker自动化部署Spring boot项目 （一）概述">http://yoursite.com/2019/12/25/Jenkins+Docker%E8%87%AA%E5%8A%A8%E5%8C%96%E9%83%A8%E7%BD%B2Spring%20boot%E9%A1%B9%E7%9B%AE%20%EF%BC%88%E4%B8%80%EF%BC%89%E6%A6%82%E8%BF%B0/</a></p>
+        <p>最后更新： 2019年12月28日 22:06</p>
+        <p>原始链接： <a class="post-url" href="/2019/0421/hello-world.html" title="Hello World">http://yoursite.com/2019/0421/hello-world.html</a></p>
         <footer>
             <a href="http://yoursite.com">
                 <img src="/images/logo.jpg" alt="Qing Cao">
@@ -236,7 +218,7 @@
     <div class="post-share-list" id="share-list">
         <ul class="share-icons">
           <li>
-            <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://yoursite.com/2019/12/25/Jenkins+Docker%E8%87%AA%E5%8A%A8%E5%8C%96%E9%83%A8%E7%BD%B2Spring%20boot%E9%A1%B9%E7%9B%AE%20%EF%BC%88%E4%B8%80%EF%BC%89%E6%A6%82%E8%BF%B0/&title=《Jenkins+Docker自动化部署Spring boot项目 （一）概述》 — 仙陶悟-博客&pic=https://image.mariojd.cn/happyjared/2019411/spring-boot-admin-example.jpg" data-title="微博">
+            <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://yoursite.com/2019/0421/hello-world.html&title=《Hello World》 — 仙陶悟-博客&pic=http://yoursite.comimages/logo.jpg" data-title="微博">
               <i class="fa fa-weibo"></i>
             </a>
           </li>
@@ -246,22 +228,22 @@
             </a>
           </li>
           <li>
-            <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://yoursite.com/2019/12/25/Jenkins+Docker%E8%87%AA%E5%8A%A8%E5%8C%96%E9%83%A8%E7%BD%B2Spring%20boot%E9%A1%B9%E7%9B%AE%20%EF%BC%88%E4%B8%80%EF%BC%89%E6%A6%82%E8%BF%B0/&title=《Jenkins+Docker自动化部署Spring boot项目 （一）概述》 — 仙陶悟-博客&source=" data-title="QQ">
+            <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://yoursite.com/2019/0421/hello-world.html&title=《Hello World》 — 仙陶悟-博客&source=" data-title="QQ">
               <i class="fa fa-qq"></i>
             </a>
           </li>
           <li>
-            <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://yoursite.com/2019/12/25/Jenkins+Docker%E8%87%AA%E5%8A%A8%E5%8C%96%E9%83%A8%E7%BD%B2Spring%20boot%E9%A1%B9%E7%9B%AE%20%EF%BC%88%E4%B8%80%EF%BC%89%E6%A6%82%E8%BF%B0/" data-title="Facebook">
+            <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://yoursite.com/2019/0421/hello-world.html" data-title="Facebook">
               <i class="fa fa-facebook"></i>
             </a>
           </li>
           <li>
-            <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《Jenkins+Docker自动化部署Spring boot项目 （一）概述》 — 仙陶悟-博客&url=http://yoursite.com/2019/12/25/Jenkins+Docker%E8%87%AA%E5%8A%A8%E5%8C%96%E9%83%A8%E7%BD%B2Spring%20boot%E9%A1%B9%E7%9B%AE%20%EF%BC%88%E4%B8%80%EF%BC%89%E6%A6%82%E8%BF%B0/&via=http://yoursite.com" data-title="Twitter">
+            <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《Hello World》 — 仙陶悟-博客&url=http://yoursite.com/2019/0421/hello-world.html&via=http://yoursite.com" data-title="Twitter">
               <i class="fa fa-twitter"></i>
             </a>
           </li>
           <li>
-            <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://yoursite.com/2019/12/25/Jenkins+Docker%E8%87%AA%E5%8A%A8%E5%8C%96%E9%83%A8%E7%BD%B2Spring%20boot%E9%A1%B9%E7%9B%AE%20%EF%BC%88%E4%B8%80%EF%BC%89%E6%A6%82%E8%BF%B0/" data-title="Google+">
+            <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://yoursite.com/2019/0421/hello-world.html" data-title="Google+">
               <i class="fa fa-google-plus"></i>
             </a>
           </li>
@@ -271,7 +253,7 @@
 <div class="post-modal wx-share" id="wxShare">
     <a class="close" href="javascript:;" id="wxShare-close">×</a>
     <p>扫一扫，分享到微信</p>
-    <img src="//api.qrserver.com/v1/create-qr-code/?data=http://yoursite.com/2019/12/25/Jenkins+Docker%E8%87%AA%E5%8A%A8%E5%8C%96%E9%83%A8%E7%BD%B2Spring%20boot%E9%A1%B9%E7%9B%AE%20%EF%BC%88%E4%B8%80%EF%BC%89%E6%A6%82%E8%BF%B0/" alt="微信分享二维码">
+    <img src="//api.qrserver.com/v1/create-qr-code/?data=http://yoursite.com/2019/0421/hello-world.html" alt="微信分享二维码">
 </div>
 
 <div class="mask"></div>
@@ -280,13 +262,6 @@
         <ul class="article-footer-menu">
             
             
-  <li class="article-footer-tags">
-    <i class="fa fa-tags"></i>
-      
-    <a href="/tags/jenkins/" class="color3">jenkins</a>
-      
-  </li>
-
         </ul>
         
     </footer>
@@ -296,16 +271,26 @@
 
     <aside class="post-toc-pos post-toc-top" id="post-toc">
         <nav class="post-toc-wrap">
-            <ol class="post-toc"><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#Jenkins-Docker自动化部署Spring-boot项目（一）概述"><span class="post-toc-text">Jenkins+Docker自动化部署Spring boot项目（一）概述</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#前置条件"><span class="post-toc-text">前置条件</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#说明"><span class="post-toc-text">说明</span></a></li></ol></li></ol>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#Quick-Start"><span class="post-toc-text">Quick Start</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#Create-a-new-post"><span class="post-toc-text">Create a new post</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#Run-server"><span class="post-toc-text">Run server</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#Generate-static-files"><span class="post-toc-text">Generate static files</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#Deploy-to-remote-sites"><span class="post-toc-text">Deploy to remote sites</span></a></li></ol></li></ol>
         </nav>
     </aside>
     
 
 <nav id="article-nav">
   
+    <a href="/2019/0505/github-%EF%BC%8B-jenkins-maven-docker-automated-build-and-deployment.html" id="article-nav-newer" class="article-nav-link-wrap">
+
+      <span class="article-nav-title">
+        <i class="fa fa-hand-o-left" aria-hidden="true"></i>
+        
+          github＋jenkins＋maven＋docker自动化构建部署
+        
+      </span>
+    </a>
   
-    <a href="/2019/12/25/Jenkins+Docker%E8%87%AA%E5%8A%A8%E5%8C%96%E9%83%A8%E7%BD%B2Spring%20boot%E9%A1%B9%E7%9B%AE%20%EF%BC%88%E4%B8%89%EF%BC%89%E6%90%AD%E5%BB%BAjenkins/" id="article-nav-older" class="article-nav-link-wrap">
-      <span class="article-nav-title">Jenkins+Docker自动化部署Spring boot项目 （三）搭建jenkins</span>
+  
+    <a href="/2019/0421/test-blog.html" id="article-nav-older" class="article-nav-link-wrap">
+      <span class="article-nav-title">测试博客</span>
       <i class="fa fa-hand-o-right" aria-hidden="true"></i>
     </a>
   

@@ -11,7 +11,7 @@
   <meta name="description" content="1.非分片字段查询Mycat中的路由结果是通过分片字段和分片方法来确定的。例如下图中的一个Mycat分库方案： · 根据 tt_waybill 表的 id 字段来进行分片 · 分片方法为 id 值取 3 的模，根据模值确定在DB1，DB2，DB3中的某个分片  如果查询条件中有 id 字段的情况还好，查询将会落到某个具体的分片。例如： mysql&gt;select * fromtt_waybil">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Mycat 不适应场景（改造尽量避免）">
-<meta property="og:url" content="http://yoursite.com/2019/05/05/Mycat%20%E4%B8%8D%E9%80%82%E5%BA%94%E5%9C%BA%E6%99%AF%EF%BC%88%E6%94%B9%E9%80%A0%E5%B0%BD%E9%87%8F%E9%81%BF%E5%85%8D%EF%BC%89/index.html">
+<meta property="og:url" content="http://yoursite.com/2019/0505/mycat-does-not-adapt-to-the-scene-try-avoid-transformation-as-much-possible.html">
 <meta property="og:site_name" content="仙陶悟-博客">
 <meta property="og:description" content="1.非分片字段查询Mycat中的路由结果是通过分片字段和分片方法来确定的。例如下图中的一个Mycat分库方案： · 根据 tt_waybill 表的 id 字段来进行分片 · 分片方法为 id 值取 3 的模，根据模值确定在DB1，DB2，DB3中的某个分片  如果查询条件中有 id 字段的情况还好，查询将会落到某个具体的分片。例如： mysql&gt;select * fromtt_waybil">
 <meta property="og:locale" content="en_US">
@@ -25,7 +25,7 @@
 <meta property="og:image" content="http://img-blog.csdn.net/20180316145519463?watermark/2/text/Ly9ibG9nLmNzZG4ubmV0L2dhb2J1ZG9uZzEyMzQ=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70">
 <meta property="og:image" content="http://img-blog.csdn.net/20180316145524527?watermark/2/text/Ly9ibG9nLmNzZG4ubmV0L2dhb2J1ZG9uZzEyMzQ=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70">
 <meta property="article:published_time" content="2019-05-05T05:58:19.000Z">
-<meta property="article:modified_time" content="2019-12-25T10:34:50.808Z">
+<meta property="article:modified_time" content="2019-12-28T13:42:55.508Z">
 <meta property="article:author" content="Qing Cao">
 <meta property="article:tag" content="MyCat">
 <meta name="twitter:card" content="summary">
@@ -225,8 +225,8 @@
 
             <div class="post-copyright">
     <div class="content">
-        <p>最后更新： 2019年12月25日 18:34</p>
-        <p>原始链接： <a class="post-url" href="/2019/05/05/Mycat%20%E4%B8%8D%E9%80%82%E5%BA%94%E5%9C%BA%E6%99%AF%EF%BC%88%E6%94%B9%E9%80%A0%E5%B0%BD%E9%87%8F%E9%81%BF%E5%85%8D%EF%BC%89/" title="Mycat 不适应场景（改造尽量避免）">http://yoursite.com/2019/05/05/Mycat%20%E4%B8%8D%E9%80%82%E5%BA%94%E5%9C%BA%E6%99%AF%EF%BC%88%E6%94%B9%E9%80%A0%E5%B0%BD%E9%87%8F%E9%81%BF%E5%85%8D%EF%BC%89/</a></p>
+        <p>最后更新： 2019年12月28日 21:42</p>
+        <p>原始链接： <a class="post-url" href="/2019/0505/mycat-does-not-adapt-to-the-scene-try-avoid-transformation-as-much-possible.html" title="Mycat 不适应场景（改造尽量避免）">http://yoursite.com/2019/0505/mycat-does-not-adapt-to-the-scene-try-avoid-transformation-as-much-possible.html</a></p>
         <footer>
             <a href="http://yoursite.com">
                 <img src="/images/logo.jpg" alt="Qing Cao">
@@ -283,7 +283,7 @@
     <div class="post-share-list" id="share-list">
         <ul class="share-icons">
           <li>
-            <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://yoursite.com/2019/05/05/Mycat%20%E4%B8%8D%E9%80%82%E5%BA%94%E5%9C%BA%E6%99%AF%EF%BC%88%E6%94%B9%E9%80%A0%E5%B0%BD%E9%87%8F%E9%81%BF%E5%85%8D%EF%BC%89/&title=《Mycat 不适应场景（改造尽量避免）》 — 仙陶悟-博客&pic=https://image.mariojd.cn/happyjared/2019413/jasypt-spring-boot-example.jpg" data-title="微博">
+            <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://yoursite.com/2019/0505/mycat-does-not-adapt-to-the-scene-try-avoid-transformation-as-much-possible.html&title=《Mycat 不适应场景（改造尽量避免）》 — 仙陶悟-博客&pic=https://image.mariojd.cn/happyjared/2019413/jasypt-spring-boot-example.jpg" data-title="微博">
               <i class="fa fa-weibo"></i>
             </a>
           </li>
@@ -293,22 +293,22 @@
             </a>
           </li>
           <li>
-            <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://yoursite.com/2019/05/05/Mycat%20%E4%B8%8D%E9%80%82%E5%BA%94%E5%9C%BA%E6%99%AF%EF%BC%88%E6%94%B9%E9%80%A0%E5%B0%BD%E9%87%8F%E9%81%BF%E5%85%8D%EF%BC%89/&title=《Mycat 不适应场景（改造尽量避免）》 — 仙陶悟-博客&source=" data-title="QQ">
+            <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://yoursite.com/2019/0505/mycat-does-not-adapt-to-the-scene-try-avoid-transformation-as-much-possible.html&title=《Mycat 不适应场景（改造尽量避免）》 — 仙陶悟-博客&source=" data-title="QQ">
               <i class="fa fa-qq"></i>
             </a>
           </li>
           <li>
-            <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://yoursite.com/2019/05/05/Mycat%20%E4%B8%8D%E9%80%82%E5%BA%94%E5%9C%BA%E6%99%AF%EF%BC%88%E6%94%B9%E9%80%A0%E5%B0%BD%E9%87%8F%E9%81%BF%E5%85%8D%EF%BC%89/" data-title="Facebook">
+            <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://yoursite.com/2019/0505/mycat-does-not-adapt-to-the-scene-try-avoid-transformation-as-much-possible.html" data-title="Facebook">
               <i class="fa fa-facebook"></i>
             </a>
           </li>
           <li>
-            <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《Mycat 不适应场景（改造尽量避免）》 — 仙陶悟-博客&url=http://yoursite.com/2019/05/05/Mycat%20%E4%B8%8D%E9%80%82%E5%BA%94%E5%9C%BA%E6%99%AF%EF%BC%88%E6%94%B9%E9%80%A0%E5%B0%BD%E9%87%8F%E9%81%BF%E5%85%8D%EF%BC%89/&via=http://yoursite.com" data-title="Twitter">
+            <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《Mycat 不适应场景（改造尽量避免）》 — 仙陶悟-博客&url=http://yoursite.com/2019/0505/mycat-does-not-adapt-to-the-scene-try-avoid-transformation-as-much-possible.html&via=http://yoursite.com" data-title="Twitter">
               <i class="fa fa-twitter"></i>
             </a>
           </li>
           <li>
-            <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://yoursite.com/2019/05/05/Mycat%20%E4%B8%8D%E9%80%82%E5%BA%94%E5%9C%BA%E6%99%AF%EF%BC%88%E6%94%B9%E9%80%A0%E5%B0%BD%E9%87%8F%E9%81%BF%E5%85%8D%EF%BC%89/" data-title="Google+">
+            <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://yoursite.com/2019/0505/mycat-does-not-adapt-to-the-scene-try-avoid-transformation-as-much-possible.html" data-title="Google+">
               <i class="fa fa-google-plus"></i>
             </a>
           </li>
@@ -318,7 +318,7 @@
 <div class="post-modal wx-share" id="wxShare">
     <a class="close" href="javascript:;" id="wxShare-close">×</a>
     <p>扫一扫，分享到微信</p>
-    <img src="//api.qrserver.com/v1/create-qr-code/?data=http://yoursite.com/2019/05/05/Mycat%20%E4%B8%8D%E9%80%82%E5%BA%94%E5%9C%BA%E6%99%AF%EF%BC%88%E6%94%B9%E9%80%A0%E5%B0%BD%E9%87%8F%E9%81%BF%E5%85%8D%EF%BC%89/" alt="微信分享二维码">
+    <img src="//api.qrserver.com/v1/create-qr-code/?data=http://yoursite.com/2019/0505/mycat-does-not-adapt-to-the-scene-try-avoid-transformation-as-much-possible.html" alt="微信分享二维码">
 </div>
 
 <div class="mask"></div>
@@ -350,7 +350,7 @@
 
 <nav id="article-nav">
   
-    <a href="/2019/05/05/%E4%BD%BF%E7%94%A8weave%E5%AE%9E%E7%8E%B0%E8%B7%A8%E4%B8%BB%E6%9C%BAdocker%E5%AE%B9%E5%99%A8%E4%BA%92%E8%81%94/" id="article-nav-newer" class="article-nav-link-wrap">
+    <a href="/2019/0505/using-weave-to-achieve-crosshost-docker-container-interconnection.html" id="article-nav-newer" class="article-nav-link-wrap">
 
       <span class="article-nav-title">
         <i class="fa fa-hand-o-left" aria-hidden="true"></i>
@@ -361,8 +361,8 @@
     </a>
   
   
-    <a href="/2019/05/05/github+jenkins+maven+docker%E8%87%AA%E5%8A%A8%E5%8C%96%E6%9E%84%E5%BB%BA%E9%83%A8%E7%BD%B2/" id="article-nav-older" class="article-nav-link-wrap">
-      <span class="article-nav-title">github+jenkins+maven+docker自动化构建部署</span>
+    <a href="/2019/0505/github-%EF%BC%8B-jenkins-maven-docker-automated-build-and-deployment.html" id="article-nav-older" class="article-nav-link-wrap">
+      <span class="article-nav-title">github＋jenkins＋maven＋docker自动化构建部署</span>
       <i class="fa fa-hand-o-right" aria-hidden="true"></i>
     </a>
   
