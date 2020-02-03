@@ -8,15 +8,15 @@
   
     <meta name="keywords" content="仙陶悟" />
   
-  <meta name="description" content="TCP通信参考模型OSI参考模型  应用层-》表示层-》会话层-》传输控制层-》网咯层-》链路层-》物理层 Linux模拟请求百度123exec 8&lt;&gt; &#x2F;dev&#x2F;tcp&#x2F;www.baidu.com&#x2F;80		&#x2F;&#x2F; &gt;与&lt; 分别表示输入输出,此行表示与百度建立tcp连接(三次握手)echo -e &quot;GET &#x2F; HTTP&#x2F;1.0\n&quot; &gt;&amp; 8			&#x2F;&#x2F; 发送ht">
+  <meta name="description" content="TCP通信OSI七层参考模型与TCP&#x2F;IP   Linux模拟请求百度123exec 8&lt;&gt; &#x2F;dev&#x2F;tcp&#x2F;www.baidu.com&#x2F;80		&#x2F;&#x2F; &gt;与&lt; 分别表示输入输出,此行表示与百度建立tcp连接(三次握手)echo -e &quot;GET &#x2F; HTTP&#x2F;1.0\n&quot; &gt;&amp; 8			&#x2F;&#x2F; 发送http协议cat &lt;&amp; 8					&#x2F;&#x2F; 返回响">
 <meta property="og:type" content="article">
 <meta property="og:title" content="TCP通信">
 <meta property="og:url" content="http://yoursite.com/2020/0203/tcp-communication.html">
 <meta property="og:site_name" content="仙陶悟-博客">
-<meta property="og:description" content="TCP通信参考模型OSI参考模型  应用层-》表示层-》会话层-》传输控制层-》网咯层-》链路层-》物理层 Linux模拟请求百度123exec 8&lt;&gt; &#x2F;dev&#x2F;tcp&#x2F;www.baidu.com&#x2F;80		&#x2F;&#x2F; &gt;与&lt; 分别表示输入输出,此行表示与百度建立tcp连接(三次握手)echo -e &quot;GET &#x2F; HTTP&#x2F;1.0\n&quot; &gt;&amp; 8			&#x2F;&#x2F; 发送ht">
+<meta property="og:description" content="TCP通信OSI七层参考模型与TCP&#x2F;IP   Linux模拟请求百度123exec 8&lt;&gt; &#x2F;dev&#x2F;tcp&#x2F;www.baidu.com&#x2F;80		&#x2F;&#x2F; &gt;与&lt; 分别表示输入输出,此行表示与百度建立tcp连接(三次握手)echo -e &quot;GET &#x2F; HTTP&#x2F;1.0\n&quot; &gt;&amp; 8			&#x2F;&#x2F; 发送http协议cat &lt;&amp; 8					&#x2F;&#x2F; 返回响">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2020-02-03T04:02:00.000Z">
-<meta property="article:modified_time" content="2020-02-03T06:42:02.310Z">
+<meta property="article:modified_time" content="2020-02-03T09:07:14.290Z">
 <meta property="article:author" content="Qing Cao">
 <meta property="article:tag" content="仙陶悟">
 <meta name="twitter:card" content="summary">
@@ -144,24 +144,38 @@
     <div class="article-entry post-content" itemprop="articleBody">
       
             
-            <h1 id="TCP通信"><a href="#TCP通信" class="headerlink" title="TCP通信"></a>TCP通信</h1><h2 id="参考模型OSI参考模型"><a href="#参考模型OSI参考模型" class="headerlink" title="参考模型OSI参考模型"></a>参考模型OSI参考模型</h2><div id="flowchart-0" class="flow-chart"></div>
+            <h1 id="TCP通信"><a href="#TCP通信" class="headerlink" title="TCP通信"></a>TCP通信</h1><h3 id="OSI七层参考模型与TCP-IP"><a href="#OSI七层参考模型与TCP-IP" class="headerlink" title="OSI七层参考模型与TCP/IP"></a>OSI七层参考模型与TCP/IP</h3><div id="flowchart-0" class="flow-chart"></div>
 
-<p>应用层-》表示层-》会话层-》传输控制层-》网咯层-》链路层-》物理层</p>
+
 <h3 id="Linux模拟请求百度"><a href="#Linux模拟请求百度" class="headerlink" title="Linux模拟请求百度"></a>Linux模拟请求百度</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">exec</span> 8&lt;&gt; /dev/tcp/www.baidu.com/80		// &gt;与&lt; 分别表示输入输出,此行表示与百度建立tcp连接(三次握手)</span><br><span class="line"><span class="built_in">echo</span> -e <span class="string">"GET / HTTP/1.0\n"</span> &gt;&amp; 8			// 发送http协议</span><br><span class="line">cat &lt;&amp; 8					// 返回响应内容</span><br></pre></td></tr></table></figure>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/raphael/2.2.7/raphael.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/flowchart/1.6.5/flowchart.min.js"></script><textarea id="flowchart-0-code" style="display: none">st=>start: 应用层
+<h3 id="TCP-IP-连接过程"><a href="#TCP-IP-连接过程" class="headerlink" title="TCP/IP 连接过程"></a>TCP/IP 连接过程</h3><h4 id="a-表示发送端-b-表示接收端"><a href="#a-表示发送端-b-表示接收端" class="headerlink" title="a 表示发送端  b 表示接收端"></a>a 表示发送端  b 表示接收端</h4><h4 id="三次握手"><a href="#三次握手" class="headerlink" title="三次握手"></a>三次握手</h4><ol>
+<li>a的传输层先发送一个syn包通过a的网络层，链路层，物理层，到B的物理层，链路层，网络层，传输层</li>
+<li>b的传输层会发送个syn+ack 包到a的传输层（路径同上）</li>
+<li>a的传输层发送一个ack到b 的传输层(连接建立)</li>
+</ol>
+<h4 id="传输过程"><a href="#传输过程" class="headerlink" title="传输过程"></a>传输过程</h4><p>1.a的传输层 带有ack+data(数据包)给b的传输层<br>2.b收到后直接返回个 ack包给a，data 交给应用层处理<br>3.a确认签收消息 单次通信完成</p>
+<h4 id="四次挥手"><a href="#四次挥手" class="headerlink" title="四次挥手"></a>四次挥手</h4><p>1.a的传输层 带有fin(数据包)给b的传输层<br>2.b传输层回給a 一个ack传输包（此时还没断开连接）<br>3.b确认没有正在传输的数据包了 发送一个fin(数据包)给a的传输层<br>4.a传输层回給b 一个ack传输包<br>5.a,b 释放连接资源 连接断开</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">netstat -natp			//可以查看客户端与服务端的连接 state LISTEN 监听端口端口 ESTABLISHED 建立连接的端口映射 (永远是服务端监听端口对应客户端的多个端口)</span><br></pre></td></tr></table></figure>
+
+<h3 id="网络传输层丶链路层（arp）"><a href="#网络传输层丶链路层（arp）" class="headerlink" title="网络传输层丶链路层（arp）"></a>网络传输层丶链路层（arp）</h3><p>1.内网ip 与子网掩码做与运算 得到下一跳主机ip(192.169.1.103  与掩码255.255.255.0 得到 192.169.1.0)192.169.1.0</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">routing table			//访问的ip 与每行的genmask做与运算 如果Destination一致则直接丢给当前行交换机将数据包传输给访问ip 否者调到网关进行下一跳</span><br><span class="line">arp -a  //查看链路表的mac地址</span><br><span class="line">tcpdump -nn -i eth0 arp or port 80 //抓包命令可以看到3次握手四次挥手过程</span><br></pre></td></tr></table></figure>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/raphael/2.2.7/raphael.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/flowchart/1.6.5/flowchart.min.js"></script><textarea id="flowchart-0-code" style="display: none">st=>start: 应用层（http/smtp/ssh 协议）
+a=>condition: TCP/IP(由程序完成表示会话层)
 op=>operation: 表示层
 op1=>operation: 会话层
-op2=>operation: 传输控制层
-op3=>operation: 网咯层
-op4=>operation: 链路层
+op2=>operation: 传输控制层（tcp/udp）
+op3=>operation: 网络层(ip)
+op4=>operation: 链路层(arp)
 e=>end: 物理层
 
-st->op->op1->op2->op3->op4->e
-st->op->op1->op2->op4->op3->e</textarea><textarea id="flowchart-0-options" style="display: none">{"scale":1,"line-width":2,"line-length":50,"text-margin":10,"font-size":12,"raphael":"https://cdnjs.cloudflare.com/ajax/libs/raphael/2.2.7/raphael.min.js","flowchart":"https://cdnjs.cloudflare.com/ajax/libs/flowchart/1.6.5/flowchart.min.js","options":{"scale":1,"line-width":2,"line-length":50,"text-margin":10,"font-size":12}}</textarea><script>  var code = document.getElementById("flowchart-0-code").value;  var options = JSON.parse(decodeURIComponent(document.getElementById("flowchart-0-options").value));  var diagram = flowchart.parse(code);  diagram.drawSVG("flowchart-0", options);</script>
+st->a
+a(yes)->op2->op3->op4->e
+a(no)->op->op1->op2->op3->op4->e</textarea><textarea id="flowchart-0-options" style="display: none">{"scale":1,"line-width":2,"line-length":50,"text-margin":10,"font-size":12,"raphael":"https://cdnjs.cloudflare.com/ajax/libs/raphael/2.2.7/raphael.min.js","flowchart":"https://cdnjs.cloudflare.com/ajax/libs/flowchart/1.6.5/flowchart.min.js","options":{"scale":1,"line-width":2,"line-length":50,"text-margin":10,"font-size":12}}</textarea><script>  var code = document.getElementById("flowchart-0-code").value;  var options = JSON.parse(decodeURIComponent(document.getElementById("flowchart-0-options").value));  var diagram = flowchart.parse(code);  diagram.drawSVG("flowchart-0", options);</script>
             <div class="post-copyright">
     <div class="content">
-        <p>最后更新： 2020年02月03日 14:42</p>
+        <p>最后更新： 2020年02月03日 17:07</p>
         <p>原始链接： <a class="post-url" href="/2020/0203/tcp-communication.html" title="TCP通信">http://yoursite.com/2020/0203/tcp-communication.html</a></p>
         <footer>
             <a href="http://yoursite.com">
@@ -272,7 +286,7 @@ st->op->op1->op2->op4->op3->e</textarea><textarea id="flowchart-0-options" style
 
     <aside class="post-toc-pos post-toc-top" id="post-toc">
         <nav class="post-toc-wrap">
-            <ol class="post-toc"><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#TCP通信"><span class="post-toc-text">TCP通信</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#参考模型OSI参考模型"><span class="post-toc-text">参考模型OSI参考模型</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#Linux模拟请求百度"><span class="post-toc-text">Linux模拟请求百度</span></a></li></ol></li></ol></li></ol>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#TCP通信"><span class="post-toc-text">TCP通信</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#OSI七层参考模型与TCP-IP"><span class="post-toc-text">OSI七层参考模型与TCP&#x2F;IP</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#Linux模拟请求百度"><span class="post-toc-text">Linux模拟请求百度</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#TCP-IP-连接过程"><span class="post-toc-text">TCP&#x2F;IP 连接过程</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#a-表示发送端-b-表示接收端"><span class="post-toc-text">a 表示发送端  b 表示接收端</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#三次握手"><span class="post-toc-text">三次握手</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#传输过程"><span class="post-toc-text">传输过程</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#四次挥手"><span class="post-toc-text">四次挥手</span></a></li></ol></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#网络传输层丶链路层（arp）"><span class="post-toc-text">网络传输层丶链路层（arp）</span></a></li></ol></li></ol></li></ol>
         </nav>
     </aside>
     

@@ -138,10 +138,10 @@
         </div>
         <div class="article-feed">
             <p>
-                TCP通信参考模型OSI参考模型
+                TCP通信OSI七层参考模型与TCP/IP
 
-应用层-》表示层-》会话层-》传输控制层-》网咯层-》链路层-》物理层
-Linux模拟请求百度123exec 8&lt;&gt; /dev/tcp/www.baidu.com/80		// &gt;与&lt; 分别表示输入输出,此行表示与百度建立tcp连接(三次握手)echo -e "GET / HTTP/1.0\n" &gt;&amp...
+
+Linux模拟请求百度123exec 8&lt;&gt; /dev/tcp/www.baidu.com/80		// &gt;与&lt; 分别表示输入输出,此行表示与百度建立tcp连接(三次握手)echo -e "GET / HTTP/1.0\n" &gt;&amp; 8			// 发送http协议cat &lt;&amp;...
             </p>
         </div>
       
