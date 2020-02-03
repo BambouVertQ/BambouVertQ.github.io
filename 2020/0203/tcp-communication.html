@@ -3,25 +3,23 @@
 <head>
   <meta charset="utf-8">
   
-  <title>Jenkins＋Docker自动化部署Spring boot项目 （一）概述 | 仙陶悟-博客</title>
+  <title>TCP通信 | 仙陶悟-博客</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   
     <meta name="keywords" content="仙陶悟" />
   
-  <meta name="description" content="版权声明：本文为博主原创文章，未经博主允许不得转载。 https:&#x2F;&#x2F;blog.csdn.net&#x2F;liubingyu12345&#x2F;article&#x2F;details&#x2F;80703491    Jenkins+Docker自动化部署Spring boot项目（一）概述 我在之前写的博文中，写了如何用Dockerfile maven插件将Spring boot项目打成镜像包，然后开放远程机器的Docker远程">
+  <meta name="description" content="TCP通信参考模型OSI参考模型  应用层-》表示层-》会话层-》传输控制层-》网咯层-》链路层-》物理层 Linux模拟请求百度123exec 8&lt;&gt; &#x2F;dev&#x2F;tcp&#x2F;www.baidu.com&#x2F;80		&#x2F;&#x2F; &gt;与&lt; 分别表示输入输出,此行表示与百度建立tcp连接(三次握手)echo -e &quot;GET &#x2F; HTTP&#x2F;1.0\n&quot; &gt;&amp; 8			&#x2F;&#x2F; 发送ht">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Jenkins＋Docker自动化部署Spring boot项目 （一）概述">
-<meta property="og:url" content="http://yoursite.com/2019/0507/jenkins-docker-automatic-deployment-spring-boot-project-1-overview.html">
+<meta property="og:title" content="TCP通信">
+<meta property="og:url" content="http://yoursite.com/2020/0203/tcp-communication.html">
 <meta property="og:site_name" content="仙陶悟-博客">
-<meta property="og:description" content="版权声明：本文为博主原创文章，未经博主允许不得转载。 https:&#x2F;&#x2F;blog.csdn.net&#x2F;liubingyu12345&#x2F;article&#x2F;details&#x2F;80703491    Jenkins+Docker自动化部署Spring boot项目（一）概述 我在之前写的博文中，写了如何用Dockerfile maven插件将Spring boot项目打成镜像包，然后开放远程机器的Docker远程">
+<meta property="og:description" content="TCP通信参考模型OSI参考模型  应用层-》表示层-》会话层-》传输控制层-》网咯层-》链路层-》物理层 Linux模拟请求百度123exec 8&lt;&gt; &#x2F;dev&#x2F;tcp&#x2F;www.baidu.com&#x2F;80		&#x2F;&#x2F; &gt;与&lt; 分别表示输入输出,此行表示与百度建立tcp连接(三次握手)echo -e &quot;GET &#x2F; HTTP&#x2F;1.0\n&quot; &gt;&amp; 8			&#x2F;&#x2F; 发送ht">
 <meta property="og:locale" content="en_US">
-<meta property="og:image" content="http://image.xtaowu.com/image/2019/12/27/20180615113128373.png">
-<meta property="article:published_time" content="2019-05-07T10:00:00.000Z">
-<meta property="article:modified_time" content="2020-01-14T05:33:40.054Z">
+<meta property="article:published_time" content="2020-02-03T04:02:00.000Z">
+<meta property="article:modified_time" content="2020-02-03T06:42:02.310Z">
 <meta property="article:author" content="Qing Cao">
-<meta property="article:tag" content="jenkins">
+<meta property="article:tag" content="仙陶悟">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="http://image.xtaowu.com/image/2019/12/27/20180615113128373.png">
   
   
     <link rel="icon" href="/favicon.ico">
@@ -117,27 +115,20 @@
     </div>
 </header>
       <div class="outer">
-        <section id="main" class="body-wrap"><article id="post-Jenkins+Docker自动化部署Spring boot项目 （一）概述" class="article article-type-post" itemscope itemprop="blogPost">
+        <section id="main" class="body-wrap"><article id="post-TCP通信-1" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 class="post-title" itemprop="name">
-      Jenkins＋Docker自动化部署Spring boot项目 （一）概述
+      TCP通信
     </h1>
     <div class="post-title-bar">
       <ul>
           
-              <li>
-                  <i class="fa fa-book"></i>
-                  
-                      <a href="/categories/Docker/">Docker</a>
-                  
-              </li>
-          
         <li>
-          <i class="fa fa-calendar"></i>  2019-05-07
+          <i class="fa fa-calendar"></i>  2020-02-03
         </li>
         <li>
           <i class="fa fa-eye"></i>
@@ -153,33 +144,25 @@
     <div class="article-entry post-content" itemprop="articleBody">
       
             
-            <p>版权声明：本文为博主原创文章，未经博主允许不得转载。 <a href="https://blog.csdn.net/liubingyu12345/article/details/80703491" target="_blank" rel="noopener">https://blog.csdn.net/liubingyu12345/article/details/80703491</a>   </p>
-<h1 id="Jenkins-Docker自动化部署Spring-boot项目（一）概述"><a href="#Jenkins-Docker自动化部署Spring-boot项目（一）概述" class="headerlink" title="Jenkins+Docker自动化部署Spring boot项目（一）概述"></a>Jenkins+Docker自动化部署Spring boot项目（一）概述</h1><p> 我在之前写的博文中，写了如何用Dockerfile maven插件将Spring boot项目打成镜像包，然后开放远程机器的Docker远程访问能力，通过mvn命令上传本地的镜像文件到远程机器上。其实这种做法是比较非主流的，只适合demo，自己拿来熟悉下Docker部署。<br> 目前主流做法是配合Jenkins实现自动部署，流程大概如下：   </p>
-<ol>
-<li>git提交tag/jenkins点击构建   </li>
-<li>jenkins执行用户配置好的构建计划（下面的2.x步骤都是由jenkins读取构建计划自动执行）   </li>
-<li>1 从git仓库中拉取指定代码   </li>
-<li>2 执行mvn package打包命令   </li>
-<li>3 执行mvn dockerfile:build打成镜像命令   </li>
-<li>4 上传镜像文件到搭建好的私有docker库（没有私有库，也可以用大厂提供的公有库，如docker hub,163 hub）   </li>
-<li>5 ssh免密登录部署机器，执行自己预先写好的脚本文件，完成下载镜像，执行镜像的命令   </li>
-<li>6 ssh退出   </li>
-<li>jenkins给出执行报告</li>
-</ol>
-<ul>
-<li><strong>给出一张我自己画的图来简单描述下我搭建的部署流程(比较乱，随意 看看)</strong> <img src="http://image.xtaowu.com/image/2019/12/27/20180615113128373.png" class="post-image" title ="docker部署流程图" alt="docker部署流程图"/>
+            <h1 id="TCP通信"><a href="#TCP通信" class="headerlink" title="TCP通信"></a>TCP通信</h1><h2 id="参考模型OSI参考模型"><a href="#参考模型OSI参考模型" class="headerlink" title="参考模型OSI参考模型"></a>参考模型OSI参考模型</h2><div id="flowchart-0" class="flow-chart"></div>
 
+<p>应用层-》表示层-》会话层-》传输控制层-》网咯层-》链路层-》物理层</p>
+<h3 id="Linux模拟请求百度"><a href="#Linux模拟请求百度" class="headerlink" title="Linux模拟请求百度"></a>Linux模拟请求百度</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">exec</span> 8&lt;&gt; /dev/tcp/www.baidu.com/80		// &gt;与&lt; 分别表示输入输出,此行表示与百度建立tcp连接(三次握手)</span><br><span class="line"><span class="built_in">echo</span> -e <span class="string">"GET / HTTP/1.0\n"</span> &gt;&amp; 8			// 发送http协议</span><br><span class="line">cat &lt;&amp; 8					// 返回响应内容</span><br></pre></td></tr></table></figure>
 
-</li>
-</ul>
-<hr>
-<h2 id="前置条件"><a href="#前置条件" class="headerlink" title="前置条件"></a>前置条件</h2><p> 两台机器，已配置好docker环境，一台用来部署Jenkins，一台用来部署业务系统，docker私有库可以部署在任意一台机器 上。<br> 业务系统是spring boot项目，已集成dockerfile maven插件，且配置正确</p>
-<h2 id="说明"><a href="#说明" class="headerlink" title="说明"></a>说明</h2><p> 我会先介绍通过docker镜像搭建配置jenkins，再搭建docker私有库，使用的是vmware公司开源的habor，然后配置jenkins和业务系统的dockerfile，使自动化部署流程走起来。<br> 暂定下面章节如下：<br> （二） jenkins搭建配置<br> （三） 搭建docker私有库harbor<br> （四） 配置自动化部署流程</p>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/raphael/2.2.7/raphael.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/flowchart/1.6.5/flowchart.min.js"></script><textarea id="flowchart-0-code" style="display: none">st=>start: 应用层
+op=>operation: 表示层
+op1=>operation: 会话层
+op2=>operation: 传输控制层
+op3=>operation: 网咯层
+op4=>operation: 链路层
+e=>end: 物理层
 
+st->op->op1->op2->op3->op4->e
+st->op->op1->op2->op4->op3->e</textarea><textarea id="flowchart-0-options" style="display: none">{"scale":1,"line-width":2,"line-length":50,"text-margin":10,"font-size":12,"raphael":"https://cdnjs.cloudflare.com/ajax/libs/raphael/2.2.7/raphael.min.js","flowchart":"https://cdnjs.cloudflare.com/ajax/libs/flowchart/1.6.5/flowchart.min.js","options":{"scale":1,"line-width":2,"line-length":50,"text-margin":10,"font-size":12}}</textarea><script>  var code = document.getElementById("flowchart-0-code").value;  var options = JSON.parse(decodeURIComponent(document.getElementById("flowchart-0-options").value));  var diagram = flowchart.parse(code);  diagram.drawSVG("flowchart-0", options);</script>
             <div class="post-copyright">
     <div class="content">
-        <p>最后更新： 2020年01月14日 13:33</p>
-        <p>原始链接： <a class="post-url" href="/2019/0507/jenkins-docker-automatic-deployment-spring-boot-project-1-overview.html" title="Jenkins＋Docker自动化部署Spring boot项目 （一）概述">http://yoursite.com/2019/0507/jenkins-docker-automatic-deployment-spring-boot-project-1-overview.html</a></p>
+        <p>最后更新： 2020年02月03日 14:42</p>
+        <p>原始链接： <a class="post-url" href="/2020/0203/tcp-communication.html" title="TCP通信">http://yoursite.com/2020/0203/tcp-communication.html</a></p>
         <footer>
             <a href="http://yoursite.com">
                 <img src="/images/logo.jpg" alt="Qing Cao">
@@ -236,7 +219,7 @@
     <div class="post-share-list" id="share-list">
         <ul class="share-icons">
           <li>
-            <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://yoursite.com/2019/0507/jenkins-docker-automatic-deployment-spring-boot-project-1-overview.html&title=《Jenkins＋Docker自动化部署Spring boot项目 （一）概述》 — 仙陶悟-博客&pic=https://image.mariojd.cn/happyjared/2019411/spring-boot-admin-example.jpg" data-title="微博">
+            <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://yoursite.com/2020/0203/tcp-communication.html&title=《TCP通信》 — 仙陶悟-博客&pic=http://yoursite.comimages/logo.jpg" data-title="微博">
               <i class="fa fa-weibo"></i>
             </a>
           </li>
@@ -246,22 +229,22 @@
             </a>
           </li>
           <li>
-            <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://yoursite.com/2019/0507/jenkins-docker-automatic-deployment-spring-boot-project-1-overview.html&title=《Jenkins＋Docker自动化部署Spring boot项目 （一）概述》 — 仙陶悟-博客&source=" data-title="QQ">
+            <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://yoursite.com/2020/0203/tcp-communication.html&title=《TCP通信》 — 仙陶悟-博客&source=" data-title="QQ">
               <i class="fa fa-qq"></i>
             </a>
           </li>
           <li>
-            <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://yoursite.com/2019/0507/jenkins-docker-automatic-deployment-spring-boot-project-1-overview.html" data-title="Facebook">
+            <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://yoursite.com/2020/0203/tcp-communication.html" data-title="Facebook">
               <i class="fa fa-facebook"></i>
             </a>
           </li>
           <li>
-            <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《Jenkins＋Docker自动化部署Spring boot项目 （一）概述》 — 仙陶悟-博客&url=http://yoursite.com/2019/0507/jenkins-docker-automatic-deployment-spring-boot-project-1-overview.html&via=http://yoursite.com" data-title="Twitter">
+            <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《TCP通信》 — 仙陶悟-博客&url=http://yoursite.com/2020/0203/tcp-communication.html&via=http://yoursite.com" data-title="Twitter">
               <i class="fa fa-twitter"></i>
             </a>
           </li>
           <li>
-            <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://yoursite.com/2019/0507/jenkins-docker-automatic-deployment-spring-boot-project-1-overview.html" data-title="Google+">
+            <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://yoursite.com/2020/0203/tcp-communication.html" data-title="Google+">
               <i class="fa fa-google-plus"></i>
             </a>
           </li>
@@ -271,7 +254,7 @@
 <div class="post-modal wx-share" id="wxShare">
     <a class="close" href="javascript:;" id="wxShare-close">×</a>
     <p>扫一扫，分享到微信</p>
-    <img src="//api.qrserver.com/v1/create-qr-code/?data=http://yoursite.com/2019/0507/jenkins-docker-automatic-deployment-spring-boot-project-1-overview.html" alt="微信分享二维码">
+    <img src="//api.qrserver.com/v1/create-qr-code/?data=http://yoursite.com/2020/0203/tcp-communication.html" alt="微信分享二维码">
 </div>
 
 <div class="mask"></div>
@@ -280,13 +263,6 @@
         <ul class="article-footer-menu">
             
             
-  <li class="article-footer-tags">
-    <i class="fa fa-tags"></i>
-      
-    <a href="/tags/jenkins/" class="color3">jenkins</a>
-      
-  </li>
-
         </ul>
         
     </footer>
@@ -296,26 +272,16 @@
 
     <aside class="post-toc-pos post-toc-top" id="post-toc">
         <nav class="post-toc-wrap">
-            <ol class="post-toc"><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#Jenkins-Docker自动化部署Spring-boot项目（一）概述"><span class="post-toc-text">Jenkins+Docker自动化部署Spring boot项目（一）概述</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#前置条件"><span class="post-toc-text">前置条件</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#说明"><span class="post-toc-text">说明</span></a></li></ol></li></ol>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#TCP通信"><span class="post-toc-text">TCP通信</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#参考模型OSI参考模型"><span class="post-toc-text">参考模型OSI参考模型</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#Linux模拟请求百度"><span class="post-toc-text">Linux模拟请求百度</span></a></li></ol></li></ol></li></ol>
         </nav>
     </aside>
     
 
 <nav id="article-nav">
   
-    <a href="/2019/0507/jenkins-docker-automates-the-deployment-of-spring-boot-project-2-builds-private-library-harbor.html" id="article-nav-newer" class="article-nav-link-wrap">
-
-      <span class="article-nav-title">
-        <i class="fa fa-hand-o-left" aria-hidden="true"></i>
-        
-          Jenkins＋Docker自动化部署Spring boot项目 （二）搭建docker私库Harbor
-        
-      </span>
-    </a>
   
-  
-    <a href="/2019/0505/hexo-github-build-personal-blog-super-detailed-tutorial.html" id="article-nav-older" class="article-nav-link-wrap">
-      <span class="article-nav-title">Hexo＋Github搭建个人博客(超详细教程)</span>
+    <a href="/2019/0507/jenkins-docker-automated-deployment-of-spring-boot-project-3-build.html" id="article-nav-older" class="article-nav-link-wrap">
+      <span class="article-nav-title">Jenkins＋Docker自动化部署Spring boot项目 （三）搭建jenkins</span>
       <i class="fa fa-hand-o-right" aria-hidden="true"></i>
     </a>
   
